@@ -1,0 +1,187 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+#add-button {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+#add-button:hover {
+    background-color: #45a049;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-container button {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-container button.active {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+}
+
+.filter-container button:hover:not(.active) {
+    background-color: #eee;
+}
+
+#todo-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#todo-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+
+#todo-list li.completed {
+    background-color: #e9f5e9;
+}
+
+.todo-text {
+    flex-grow: 1;
+    cursor: pointer;
+    font-size: 17px;
+    color: #555;
+    word-break: break-all;
+}
+
+.todo-text.completed-text {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.action-buttons .delete-btn {
+    color: #f44336;
+}
+
+.action-buttons .delete-btn:hover {
+    color: #d32f2f;
+}
+
+.action-buttons .toggle-btn {
+    color: #4CAF50;
+}
+
+.action-buttons .toggle-btn:hover {
+    color: #45a049;
+}
+
+/* 수정 기능 관련 스타일 */
+.edit-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #007BFF;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.action-buttons .edit-btn,
+.action-buttons .save-btn,
+.action-buttons .cancel-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.action-buttons .edit-btn {
+    color: #444;
+    border: 1px solid #ddd;
+}
+
+.action-buttons .edit-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.action-buttons .save-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+.action-buttons .save-btn:hover {
+    background-color: #0056b3;
+}
+
+.action-buttons .cancel-btn {
+    color: #777;
+    border: 1px solid #ddd;
+}
+
+.action-buttons .cancel-btn:hover {
+    background-color: #f0f0f0;
+}
