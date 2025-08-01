@@ -1,0 +1,414 @@
+package com.example.todolist.model;
+// 이 클래스가 속한 패키지 입니다. 'model' 패키지는 데이터 모델 클래스를 담습니다.
+
+import jakarta.persistence.*;
+// JPA(Java Persistence API)에서 엔티티를 정의하는 데 필요한 클래스들을 가져옵니다.
+import lombok.Data;
+// Lombok 라이브러리에서 getter, setter, toString, equals, hashCode 등을
+// 자동으로 생성해주는 어노테이션입니다.
+import lombok.NoArgsConstructor;
+// Lombok이 파라미터가 없는 기본 생성자를 자동으로 생성해줍니다.
+import lombok.AllArgsConstructor;
+// Lombok이 모든 필드를 파라미터로 받는 생성자를 자동으로 생성해줍니다.
+import java.time.LocalDateTime;
+// java 8 부터 제공되는 날짜와 시간을 다루는 클래스를 가져옵니다.
+
+@Entity
+// 이 클래스가 JPA엔티티(entity)임을 나타냅니다.
+// 이 클래스의 인스턴스들이 데이터베이스 테이블의 레코드(row)와 연결됩니다.
+@Table(name = "todos")
+// 이 엔티티가 매핑될 데이터베이스 테이블의 이름을 'todos'로 지정합니다.
+@Data
+// Lombok의 대표적인 어노테이션으로, 아래 코드들을 자동으로 생성해줍니다
+// @Getter : 모든 필드에 대한 getter 메서드
+// @Setter : 모든 필드에 대한 setter 메서드
+// @ToString : 객체의 필드 값을 문자열로 표현하는 toSting() 메서드
+// @EqualsAndHashCode : 객체 비교를 위한 equals()와 HashCode() 메서드
+@NoArgsConstructor
+// 파라미터가 없는 기본 생성자를 자동으로 만듭니다. (public Todo() {...})
+@AllArgsConstructor
+// 모든 필드를 파라미터로 받는 생성자를 자동으로 만듭니다
+// 예 : public Todo(Long id, String title, ... ) {...}
+public class Todo {
+
+    @Id
+    // 이 필드가 엔티티의 기본 키 (Primary Key)임을 나타냅니다
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // 기본 키의 값이 자동으로 생성되도록 합니다.
+    // GenerationType.IDENTITY 는 데이터베이스가 값을 자동 증가 (auto-increment) 시키도록 합니다.
+    private Long id;
+
+    @Column(nullable = false)
+    // 이 필드가 데이터베이스 테이블의 컬럼과 매핑됩니다.
+    // nullable = false는 이 컬럼에 null 값이 들어갈 수 없음을 의미합니다.
+    private String title;
+
+    @Column(nullable = false)
+    // nullable = false로 설정하여 null을 허용하지 않습니다.
+    private Boolean completed = false;
+    // 필드 선언과 동시에 기본값을 false로 설정합니다.
+
+    @Column(name = "created_at")
+    // 이 필드가 매핑될 데이터베이스 컬럼의 이름을 'created_at'으로 지정합니다.
+    private LocalDateTime createdAt = LocalDateTime.now();
+    // 객체가 생성될 때 현재 시간을 기본값으로 설정합니다.
+
+    @Column(name = "updated_at")
+    // 이 필드가 매핑될 컬럼의 이름을 'updated_at'으로 지정합니다.
+    private LocalDateTime updatedAt = LocalDateTime.now();
+    // 객체가 생성될 때 현재 시간을 기본값으로 설정합니다.
+
+    @PreUpdate
+    // 엔티티가 업데이트(UPDATE) 되기 전에 이 메서드를 실행하도록 지정하는 JPA 콜백 어노테이션입니다
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+        // 엔티티가 업데이트될 때마다 updatedAt 필드를 현재 시간으로 갱신합니다.
+    }
+}
+
+
+해설
+이 코드는 스프링부트와 JPA를 사용하여 데이터베이스의 todos 테이블과 매핑되는 Todo 데이터모델 클래스입니다.
+
+Todo 클래스는 투두리스트 애플리케이션의 핵심 데이터 구조를 정의하는 모델(Model) 클래스입니다
+
+이 클래스는 다음 두 가지 중요한 역할을 수행합니다.
+
+1. 애플리케이션의 데이터 구조 정의
+할 일(Todo) 하나가 어떤 정보들 (id, title, completed, createdAt, updatedAt)
+로 구성되는지를 명확하게 정의합니다.
+
+2. 데이터베이스 테이블 매핑 :
+@Entity 와 @Table 등의 JPA 어노테이션을 사용하여 Todo 객체가
+데이터베이스의 todos테이블과 직접적으로 연결되도록 합니다
+
+@Id는 기본 키를, @Column은 테이블의 컬럼을 의미하며, @GeneratedValue는 ID가 자동으로
+생성되게 하는 등, 객체와 테이블 간의 관계를 정확하게 정의합니다.
+
+@Data와 같은 Lombok 어노테이션을 통해 코드를 간결하게 유지하면서 필요한 메서드들을 자동으로 생성하여
+개발 효율성을 높입니다.
+
+결론적으로, 이 Todo 클래스는 애플리케이션에서 데이터를 다루는 기준이자, 데이터베이스와 소통하는 통로역할
+을 하는 매우 중요한 클래스입니다.
+
+
+
+
+
+
+
+추가해설
+
+파라미터가 없는 기본 생성자란?
+생성자   는  붕어빵 기계 틀과 같습니다. 객체(붕어 빵)를 만들어 내는 역할을 합니다
+
+그리고
+
+파라미터   는 붕어빵 틀에 넣는 재료라고 생각하면 됩니다.
+
+파라미터가 있는 생성자 : "팥, 슈크림을 넣어서 붕어빵을 만들어줘" 라고 말하는 것과 같습니다
+재료(파라미터)를 지정해서 붕어빵(객체)를 만듭니다.
+
+파라미터가 없는 생성자(기본 생성자) : " 그냥 아무 재료 없이 붕어빵 틀만 찍어내줘" 라고 말하는 것과
+같습니다. 아무런 재료도 넣지 않고 껍데기(기본 객체)만 만드는 겁니다.
+
+@NoArgsConstructor 의 역할
+@NoArgsConstructor 는 이        아무 재료 없는 붕어빵 틀      을 여러분이 직접 만들지 않아도,
+롬복(Lombok) 이라는 도구가 알아서 만들어주는 마법같은 도구입니다.
+
+
+// @NoArgsConstructor 가 없다면 이렇게 직접 만들어야 합니다.
+public class Person {
+    // ... 필드들
+
+    public Person() { // <- 이게 기본 생성자 입니다.
+        // 아무것도 안 해도 되지만, 꼭 만들어야 합니다.
+    }
+}
+
+// @NoArgsConstructor 가 있다면 이렇게 깔끔해집니다.
+@NoArgsConstructor // <- 이 한 줄이 위 코드를 대신해줍니다.
+public class Person {
+    // ... 필드들
+
+    // 자동으로 만들어주니 직접 작성할 필요가 없습니다.
+}
+
+즉, @NoArgsConstructor 는 아무것도 없는 빈 객체를 만들어주는 도구     를
+코드로 직접 치지 않아도, 한줄로 간단하게 해결해 주는 역할을 합니다.
+
+
+
+붕어빵 틀 = 생성자
+붕어빵 재료 = 파라미터
+
+파라미터가 없는 생성자 (기본 생성자)
+재료를 넣지 않고, 빈 붕어빵 껍데기를 만드는 것과 같습니다.
+일단 붕어빵을 만든 후에 나중에 팥을 넣을 수도 있습니다.
+
+특징 : 객체(붕어빵)를 만들 때 초기값을 지정하지 않습니다.
+언제 사용 : 일단 객체를 만든 다음, 필요에 따라 값을   설정할 때 주로 사용합니다.
+
+
+class Person {
+    private String name;
+    private int age;
+
+    // 파라미터가 없는 생성자 (기본 생성자)
+    public Person() {
+        System.out.println("기본 생성자가 호출되었습니다. 빈 객체를 만들어요");
+    }
+
+    // getter와 setter
+    public String getName() { return name;}
+    public void setName(String name) {this.name = name; }
+    public int getAge() {return age;}
+    public void setAge(int age) {this.age = age; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // 1. 파라미터가 없는 생성자로 빈 객체(빈 붕어빵) 만들기
+        Person person1 = new Person();
+
+        // 2. 나중에 값을 채워 넣기 (팥 넣기)
+        person1.setName("홍길동");
+        person1.setAge(25);
+
+        System.out.println("만들어진 사람의 이름 :" + person1.getName()); // 출력 : 홍길동
+        System.out.println("만들어진 사람의 나이" + person1.getAge()); // 출력 : 25
+    }
+}
+
+
+파라미터가 있는 생성자
+붕어빵을 만들 때 재료(팥, 슈크림 등)를 미리 넣어서 만드는 것과 같습니다. 객체가 만들어지는 순간부터
+원하는 값을 가지고 시작합니다.
+
+특징 : 객체를 만들 때 필수적인 초기값을 반드시 지정해야 합니다.
+언제 사용 : 객체를 만들 때부터 모든 속성을 완벽하게 채우고 싶을 때 사용합니다.
+
+class Person {
+    private String name;
+    private int age;
+
+    // 파라미터가 있는 생성자
+    public Person(String name, int age) {
+        // 전달받은 값(파라미터)으로 객체의 필드를 초기화합니다.
+        this.name = name;
+        this.age = age;
+        System.out.println("파라미터가 있는 생성자가 호출되어습니다. 재료를 채워서 객체를 만듭니다.");
+    }
+
+    // getter와 setter
+    public String getName() {return name; }
+    public void setName(String name) {this.name = name;}
+    public int getAge() {return age;}
+    public void setAge(int age) {this.age = age;}
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // 1. 파라미터가 있는 생성자로 객체(재료를 넣은 붕어빵) 만들기
+        Person person2 = new Person("김철수, 30");
+
+        // 2. 이미 값이 채워져 있으므로 바로 사용 가능
+        Systen.out.println("만들어진 사람의 이름 : " + person2.getName() ); // 출력 : 김철수
+        System.out.println("만들어진 사람의 나이" + person2.getAge()); // 출력 : 30
+    }
+}
+
+
+가장 큰 차이점 요약
+구분           | 파라미터가 없는 생성자(기본)          | 파라미터가 있는 생성자
+객체 생성 시점  | 빈 객체를 만들고, 나중에 값을 채워 넣음 | 객체 생성과 동시에 값을 모두 채워 넣음
+장점           | 유연하게 객체를 생성할 수 있음         | 코드 한 줄로 완벽한 객체를 만들 수 있어 편리함
+
+
+이 중 @NoArgsConstructor 는 이중에서 '파라미터 없는 생성자'를 자동으로 만들어주는 도구입니다.
+
+
+@AllArgsConstructor 은 클래스에 있는 모든 필드를 파라미터로 받는 생성자를 자동으로 만들어주는 도구입니다.
+붕어빵 비유로 다시 설명드리겠습니다.
+
+@NoArgsConstructor : "재료 없이 일단 빈 붕어빵 틀만 찍어내줘"
+@AllArgsConstructor : "팥, 슈크림 등 모든 재료를 완벽하게 다 넣어서 붕어빵을 만들어줘"
+
+
+@AllArgsConstructor의 역할
+우리가 Person 이라는 클래스를 만들고, name 과 age 라는 두 개의 필드를 가질 때,
+이 두 필드를 모두 파라미터로 받는 생성자를 직접 만들지 않아도,  @AllArgsConstructor가 알아서 만들어줍니다
+
+1. @AllArgsConstructor 를 사용하지 않은 경우
+
+name과 age 필드를 초기화 하는 생성자를 직접 작성해야 합니다.
+
+public class Person {
+    private String name;
+    private int age;
+
+    // 모든 필드를 파라미터로 받는 생성자를 직접 작성
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+
+2. @AllArgsConstructor를 사용한 경우
+위의 코드와 동일한 기능을 하지만, 코드가 훨씬 간결해 집니다.
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor // 이 어노테이션이 위 코드를 대신해줍니다.
+public class Person {
+    private String name;
+    private int age;
+}
+
+
+
+@NoArgsConstructor와 @AllArgsConstructor를 함께 사용했을 때의 예시코드
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
+
+@Data // @Getter, @Setter, @ToString 등
+@NoArgsConstructor // 빈 객체를 만드는 기본 생성자
+@AllArgsConstructor // 모든 필드를 채워서 객체를 만드는 생성자
+public class Person {
+    private String name;
+    private int age;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- @NoArgsConstructor로 객체 생성")
+        // 빈 붕어빵 껍데기를 만들고, 나중에 재료를 넣습니다.
+        Person person1 = new Person();
+        person1.setName("홍길동");
+        person1.setAge(25);
+        System.out.println("person1" + person1); // person1 : Person(name = 홍길동, age = 25)
+
+        System.out.println("\n--- @AllArgsConstructor로 객체 생성 ---")
+        // 모든 재료를 한 번에 넣어서 붕어빵을 만듭니다.
+        Person person2 = new Person("김철수", 30);
+        System.out.println("person2:" + person2); // person2 : person(name = 김철수, age =30)
+    }
+}
+
+
+@AllArgsConstructor 는 왜 쓸까?
+
+@AllArgsConstructor 는 특히 불변 객체 (Immutable Object)를 만들 때 아주 유용합니다.
+객체가 처음 생성될 때 모든 값이 완벽하게 채워져야 나중에 값이 변경될 위험이 없어지기 때문입니다.
+
+결론적으로, @AllArgsConstructor 는 객체를 생성하는 시점에 모든 필드에 값을 한꺼번에 넣고 싶을 때
+사용하는 편리한 도구입니다.
+
+
+
+public static void main(String[] args)
+
+public
+접근 제어자 (Access Modifier) : 이 메서드가 어디서 호출될 수 있는지 범위를 정해줍니다.
+public은 가장 넓은 범위로, 누구나 이 메서드를 호출할 수 있다 는 의미입니다. JVM이 프로그램을 시작하기 위해
+이 메서드를 외부에서 호출해야 하기 때문에 public 으로 선언해야 합니다.
+
+static
+키워드 : 이 메서드가 정적(static) 메서드라는 것을 나타냅니다]
+static은 객체를 생성하지 않고도 클래스 이름으로 바로 호출할 수 있다는 의미입니다.
+JVM 이 프로그램을 시작할 떄, 아직 어떤 객체도 만들어지지 않은 상태이므로 main 메서드를 바로 호출할 수 있돌고
+static 으로 선언해야합니다.
+
+void
+반환타입 (Return Type) : 이 메서드가 작업을 마치고 반환할 값의 종류를 정의합니다.
+void 는 "비어있는(nothing)" 이라는 뜻으로, 이 메서드는 아무 값도 반환하지 않는다 는 의미입니다.
+프로그램의 시작점 역할을 하므로 별도로 반환할 값이 없습니다.
+
+main
+메서드 이름 : 이 메서드의 이름입니다.
+main은 자바 프로그램의 시작점이라는 것을 JVM에게 알려주는 약속된 이름입니다.
+이 일므은 반드시 main으로 고정되어야 합니다.
+
+(String[] args)
+매개변수 리스트(Parameter List) : 이 메서드가 호출될 때 전달받을 인자(값)들을 정의하는 부분입니다.
+String[] args   는   String 타입의 배열을 매개변수로 받갰다는 의미입니다.
+String[]  : 문자열(String)을 여러 개 담을 수 있는 배열
+args      : 배열의 이름 (보통 "arguments"의 약자로 사용)
+
+이 매개변수는 프로그램이 시작될 때 외부에서 전달하는 값을 받을 때 사용합니다.
+예를 들어, 명령프롬프트에서
+java MyProgram "Hello" "World"
+와 같이 실행하면, args 배열에 {"Hello", "World"}   가 담기게 됩니다.
+
+
+
+
+Parameter는 메서드를 정의할 때 사용되는 변수를, arguments 는 메서드를 호출할 때 전달하는 실제 값을
+의미한다
+
+상황설정
+우리가 친구에게 '안녕'이라고 인사하는 기능을 가진 프로그램을 만든다고 가정해 봅시다.
+
+1. Parameter (매개변수)
+이것은 기능을 정의할 때 쓰는 변수 입니다.
+인사하기 기능을 만들 건데, 이 기능은 나중에 '누구에게'인사할지 이름을 받을 거야   라고 미리 선언하는 것과 같습니다
+
+// 'name'이 바로 'Parameter(매개변수)' 입니다
+// 이 변수는 'sayHello'라는 메서드가 "누구에게 인사할지"의 역할을 합니다.
+public void sayHello(String name) {
+    System.out.println("안녕," + name + "!");
+}
+
+역할 : sayHello 라는 메서드를 만들 때, 미래에 들어올 값을 받기 위해 미리 만들어둔 자리입니다.
+위치 : 메서드 선언부의 괄호() 안에 위치합니다.
+
+2. Argument (인자)
+이것은 실제로 기능을 호출할 때 전달하는 값   입니다.
+인사하기 기능아, 너 이제 철수  한테 인사해줘    라고 실제 값을 넣는것이빈다
+
+public static void main(String[] args) {
+    // 'sayHello' 메서드를 호출합니다.
+    // "철수"라는 실제 값을 전달합니다. 이 "철수"가 'Argument' (인자) 입니다.
+    sayHello("철수");
+
+    // "영희"라는 다른 값을 전달합니다. 이것도 'Argument' 입니다.
+    sayHello("영희");
+}
+
+
+
+Person person1 = new Person(); 문법적 해석
+
+1. Person
+클래스 타입 : person1 이라는 변수가 Person 이라는 클래스의 객체를 담을 변수 라는 것을 선언하는 부분
+자바는 정적 타입 언어이므로, 변수를 선언할 때 반드시 그 변수가 어떤 타입의 데이터를 담을 것인지 명시해야합니다
+여기서는 Person 클래스 타입의 데이터를 담을 것이라고 선언하는 것입니다.
+
+2. Person1
+변수 이름 : Person 타입의 객체를 가리키는 변수의 이름입니다.
+이 변수는 객체가 메모리에 저장된 위치(주소)를 참조(reference) 하는 역할을 합니다.
+앞으로 person1 을 사용해 Person 객체의 필드나 메서드에 접근하게 됩니다.
+
+3 . =
+할당 연산자 (Assignment Operator) : 오른쪽에 있는 값을 왼쪽에 있는 변수에 할당(assignment) 하라는 의미입니다.
+여기서는 new Person() 이라는 결과로 생성된 객체의 메모리 주소를 person1 변수에 할당합니다.
+
+4. new
+객체 생성 연산자(Object Creation Operator) : 새로운 객체를 생성하라는 명령어입니다.
+new 키워드를 사용하면, 자바 가상 머신 (JVM) 은  Person 클래스의 설계도에 따라 메모리(힙 영역)에 새로운 공간을 할당하고,
+그곳에 Person 객체를 만듭니다.
+
+5. Person()
+생성자 호출(Constructor Call) : new 키워드 뒤에 오는 것을 생성자(constructor)를 호출하는 부분입니다.
+Person() 은 Person 클래스의 기본생성자(파라미터가 없는 생성자)를 호출하여 객체를 초기화합니다.
+만약 new Person("홍길동", 25) 처럼 파라미터가 있었다면, 파라미터가 있는 생성자를 호출하게 됩니다.
+
+즉,->
+이 코드는 Person 이라는 클래스의 새로운 색체를 만들고 (new Person()), 그 객체를 person1 이라는
+이름의 변수에 할당(할당 연산자 =) 합니다. 이제 person1 변수를 통해 새로 만들어진 Person 객체에 접근할 수 있게 됩니다
+

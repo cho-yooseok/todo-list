@@ -35,7 +35,6 @@ public class TodoController {
         if (optionalTodo.isPresent()) {
             Todo todo = optionalTodo.get();
             todo.setTitle(todoDetails.getTitle());
-            todo.setDescription(todoDetails.getDescription());
             todo.setCompleted(todoDetails.getCompleted());
             return ResponseEntity.ok(todoRepository.save(todo));
         }

@@ -53,8 +53,6 @@ public class TodoController {
             // Optional에서 실제 Todo 객체를 가져옵니다
             todo.setTitle(todoDetails.getTitle());
             // 제목을 업데이트합니다.
-            todo.setDescription(todoDetails.getDescription());
-            // 설명을 업데이트합니다
             todo.setCompleted(todoDetails.getCompleted());
             // 완료 상태를 업데이트합니다
             return RepositoryEntity.ok(todoRepository.save(todo));
