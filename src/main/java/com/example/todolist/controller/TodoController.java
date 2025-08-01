@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
-@CrossOrigin(origins = "*") // CORS 허용
 public class TodoController {
 
     @Autowired
