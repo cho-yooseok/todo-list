@@ -1,0 +1,18 @@
+package com.example.todolist;
+
+import org.springframework.boot.SpringApplication;
+// Spring 애플리케이션을 실행하기 위한 클래스를 가져옵니다.
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+// Spring Boot 자동 설정을 위한 핵심 어노테이션을 가져옵니다.
+
+@SpringBootApplication
+// 이 클래스를 Spring Boot 애플리케이션의 시작점으로 지정합니다.
+public class TodolistApplication {
+// 애플리케이션의 메인 클래스입니다.
+
+    public static void main(String[] args) {
+    // 자바 애플리케이션의 시작점인 main 메서드입니다.
+        SpringApplication.run(TodolistApplication.class, args);
+        // Spring Boot 애플리케이션을 실행합니다.
+    }
+}
