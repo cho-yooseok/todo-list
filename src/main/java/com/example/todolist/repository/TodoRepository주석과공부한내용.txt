@@ -1,0 +1,65 @@
+package com.example.todolist.repository;
+// 'repository' 패키지는 데이터베이스 접근을 담당하는 인터페이스들을 담습니다.
+
+import com.example.todolist.model.Todo;
+// 데이터베이스와 매핑되는 'Todo' 클래스를 가져옵니다.
+import org.springframework.data.jpa.repository.JpaRepository;
+// Spring Data JPA에서 제공하는 핵심 인터페이스입니다. 기본적인 CRUD 기능을 제공합니다.
+import org.springframework.data.jpa.repository.Query;
+// JPQL(Java Persistence Query Language) 쿼리를 직접 정의할 때 사용하는 어노테이션입니다.
+import org.springframework.stereotype.Repository;
+// 인터페이스가 스프링의 'Repository'컴포넌트임을 나타내는 어노테이션입니다.
+
+import java.util.List;
+// 여러 개의 Todo 객체를 담는 리스트(List) 타입을 사용합니다.
+
+@Repository
+// 인터페이스가 데이터 접근 계층(Repositroy Layer)의 컴포넌트임을 스프링에게 알려줍니다.
+// 스프링은 애플리케이션 시작 시 이 인터페이스의 구현체를 자동으로 생성하고 관리해줍니다.
+public interface TodoRepository extends JpaRepository<Todo, Long> {
+// 'TodoRepository' 인터페이스를 선언하고, 'JpaRepository'를 상속받습니다.
+// JpaRepository<Todo, Long>에서 첫 번째 제네릭은 엔티티 클래스(Todo)를,
+// 두 번째 재네릭은 엔티티의 ID(기본 키) 타입(Long)을 명시합니다.
+
+    // 1. Spring Data JPA의 '쿼리 메서드' 기능 활용
+    // findBy + 필드명(Completed)
+    // Spring이 메서드 이름만으로 'SELECT * FROM todos WHERE completed = ?' 쿼리를 자동으로 생성해줍니다
+    // 완료 상태(true/ false)에 따라 Todo 목록을 조회하는 메서드입니다.
+    List<Todo> findByCompleted(Boolean completed);
+
+    // 2. Spring Data JPA의 '쿼리 메서드' 기능 활용
+    // findBy + 필드명 + Containing + IgnoreCase
+    // 제목(title)에 특정 문자열(title)이 포함된 Todo를, 대소문자 구분 없이(IgnoreCase) 조회합니다.
+    // 'SELECT * FROM todos WHERE lower(title) LIKE lower(?)' 쿼리를 자동으로 생성합니다.
+    List<Todo> findByTitleContainingIgnoreCase(String title);
+
+    // 3. JPQL(Java Persistence Query Language) 활용
+    // @Query 어노테이션을 사용하여 직접 쿼리를 작성합니다.
+    // 이는 복잡한 로직이나 정렬 조건이 필요할 때 사용됩니다.
+    @Query("SELECT t FROM Todo t WHERE t.completed = false ORDER BY t.createdAt DESC")
+    // JPQL을 사용해 완료되지 않은(t.completed = false) Todo를
+    // 생성일(createdAt)을 기준으로 내림차순(DESC, 최신순)으로 정렬하여 조회합니다.
+    List<Todo> findIncompletedOrderByCreatedAtDesc();
+
+    // 4. JPQL(Java Persistence Query Language) 활용
+    @Query("SELECT t FROM Todo t WHERE t.completed" = true ORDER BY t.updatedAt DESC")
+    // JPQL을 사용해 완료된(t.completed = true) Todo를
+    // 업데이트일(updatedAt)을 기준으로 내림차순(DESC, 최신순)으로 정렬하여 조회합니다.
+    List<Todo> findCompletedOrderByUpdatedAtDesc();
+
+    // 4.JPQL(Java Persistence Query Language) 활용
+    @Query("SELECT t FROM Todo T WHERE t.completed = true ORDER BY t.updated DESC")
+    // JPQL을 사용해 완료된(t.completed = true) Todo를
+    // 업데이트일(updatedAt)을 기준으로 내림차순(DESC, 최신순)으로 정렬하여 조회합니다.
+    List<Todo> findCompletedOrderByUpdatedAtDesc();
+}
+
+
+해설
+TodoRepository 인터페이스는 투두리스트 애플리케이션에서 데이터베이스와의 모든 소통을 담당하는 레이어입니다
+이 인터페이스의 주요 역할을 다음과 같습니다
+
+CRUD(생성, 조회, 수정, 삭제) 기능 제공 : JpaRepository 를 상속받음으로써, save(), findById(),
+findAll(), delete() 와 같은 기본적인 데이터베이스 조작 메서드를 자동으로 사용할 수 있게 됩니다.
+
+
