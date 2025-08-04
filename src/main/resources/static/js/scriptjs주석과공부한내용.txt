@@ -1,0 +1,303 @@
+/*
+DOMCContedntLoaded 이벤트는 HTML 문서가 완전히 로드되고 파싱되었을 때 발생합니다.
+스크립트가 HTML 요소에 접근하기 전에 실행되는 것을 방지하기 위해 이 이벤트 리스너 안에 모든 코드를 작성합니다.
+*/
+document.addEventListener('DOMContedtLoaded', () => {
+    // 1. DOM 요소 가져오기
+    // HTML에서 id를 이용해 필요한 요소들을 가져와 상수로 저장합니다.
+    const todoInput = document.getElementById('todo-input');
+    const addButton = document.getElementById('add-button');
+    const todoList = document.getElementById('todo-list;);
+    const showAllBtn = document.getElementById('show-all');
+    const showIncompleteBtn = document.getElementById('show-incomplete');
+    const showCompletedBtn = document.getElementById('show-completed');
+
+    // 2. API URL 설정
+    // 백엔드 서버의 API 주소를 상수로 정의합니다.
+    const API_URL = 'http://localhost:8080/api/todos';
+
+    // 3. 초기 투두리스트 불러오기 및 필터링 기능
+    // 서버에서 투두리스트 데이터를 가져와 화면에 표시하는 함수입니다.
+    // filter 매개변수에 따라 URL을 변경하여 특정 상태의 목록만 가져올 수 있습니다.
+    function fetchTodos(filter = 'all') {
+        let url = API_URL; // 기본값은 모든 목록을 가져오는 URL입니다.
+        if (filter === 'incomplete') {
+            url = '${API_URL}/incomplete'; // 미완료 목록을 가져오는 URL
+        } else if (filter === 'completed') {
+            url = '${API_URL}/completed'; // 완료 목록을 가져오는 URL
+        }
+
+        // fetch API를 사용해 서버에 GET요청을 보냅니다
+        fetch(url)
+            .then(response => response.json()) // 응답을 JSON 형태로 변환합니다.
+            .then(todos => {
+                todoList.innerHTML = ''; // 기존 목록을 모두 비웁니다.
+                // 가져온 각 투두 항목에 대해 addTodoToList 함수를 실행합니다.
+                todos.forEach(todo => {
+                    addTodoToList(todo);
+                });
+            })
+            .catch(error => console.error('Error fetching todos:', error));
+            // 오류 발생 시 콘솔에 출력합니다
+
+
+
+
+)
+
+
+
+
+
+
+
+
+해설
+document.addEventListener('DOMContentLoaded', () => {
+
+document
+객체 : 웹 페이지 자체를 나타내는 객체입니다. 이 객체를 통해 html 문서의 모든 요소에 접근하고
+조작할 수 있습니다.
+document 는 DOM(Document Object Model)의 최상위 객체로, 브라우저가 HTML 파일을
+읽어들여 생성하는 문서의 모든 내용을 담고 있습니다.
+.addEventListener()
+메서드:document 객체가 가지고 있는 함수입니다. 특정 이벤트가 발생했을 때 지정된 함수를
+실행하도록 '이벤트 리스너(Event Listener)'를 등록하는 역할을 합니다.
+addEventListener는 두 개의 인자를 받습니다.
+첫 번째 인자 : 어떤 이벤트를 감지할지 지정하는 이벤트 이름(문자열)입니다.
+두 번째 인자 : 이벤트가 발생했을 때 실행할 함수입니다.
+
+'DOMContentLoaded'
+이벤트 이름 : addEventListener 의 첫번재 인자로 전달된 문자열 입니다.
+이 이벤트는 HTML문서가 완전히 로드되고, 모든 DOM트리가 구성되었을 때 발생합니다.
+즉, 페이지에 있는 모든 HTML요소(버튼, 입력창, 목록 등)들이 JavaScript로 조작 가능한 상태가
+되었음을 의미합니다.
+주의점 : DOMContentLoaded 는 <body>태그와 내부 요소들이 로드되면 바로 발생합니다.
+반면에, load 이벤트는 CSS,이미지,스크립트 파일 등 모든 외부 리소스까지 완전히 로드된 후에
+발생합니다.
+일반적으로 DOM요소 조작만 필요할 때는 DOMContentLoaded를 사용하는 것이 더 빠르고 효율적입니다.
+() => {...}
+콜백 함수 : addEventListener의 두 번째 인자로 전달된 함수입니다.
+이것은 화살표 함수 (Arrow Function)문법으로, function() {...}와 같은 역할을 합니다.
+이벤트 리스너에 등록된 함수를 '콜벡(Callback)함수'라고 부르는데, 이는 특정 이벤트가
+발생했을 때 나중에 호출(call back) 될 함수라는 의미입니다.
+중괄호{} 안에는 DOMContentLoaded 이벤트가 발생했을 때 실제로 실행될 JavaScript코드들이
+들어갑니다.
+종합정리
+document.addEventListener('DOMContentLoaded', () => {...}); 는
+HTML문서가 완전히 준비되면, 중괄호{} 안의 모든 코드를 실행해라  는 의미로 해석할 수 있습니다.
+
+따라서 투두리스트 코드에서는 이 구문 안에 모든 기능(fetchTodos, addTodoToList 등)을 작성하여,
+페이지의 HTML 요소들이 모두 준비된 후에만 JavaScript가 실행되도록 만든 것입니다.
+이 덕분에 스크립트가 존재하지 않는 요소를 조작하려다 발생하는 오류를 방지할 수 있습니다.
+
+
+const todoInput = document.getElementById('todo-input');
+
+const
+키워드 : JavaScript 에서 변수를 선언할 때 사용하는 키워드입니다.
+의미 : const는 상수(constant)를 의미합니다. 즉, 이 키워드로 선언된 변수에는
+한 번 값을 할당하면 그 값을 변경(재할당)할 수 없습니다.
+ 이 코드에서는 todoInput이라는
+변수에 DOM 요소를 할당하고,
+이 변수가 다른 값을 가리키지 않도록 고정하는 역할을 합니다.
+
+todoInput
+변수이름 : 직접 정하는 이름
+의미 : 이 변수는 HTML 문서에 있는 특정 요소를 가리키는 역할을 합니다.
+관례적으로 어떤 역할을 하는지 알기 쉽게 이름을 짓는 것이 좋습니다.
+여기서는 '투두(할 일)'를 입력(input)받는 요소라는 의미로 todoInput 이라고 지었습니다.
+
+=
+할당 연산자 : 오른쪽에 있는 값을 왼쪽에 있는 변수에 할당하는 역할을 합니다.
+
+document
+객체 : 웹 페이지 자체를 나타내는 객체입니다.
+이 객체를 통해 HTML 문서의 모든 요소에 접근하고 조작할 수 있습니다.
+DOM(Document Object Model) 의 최상위 객체로, 브라우저가 HTML 파일을 읽어들여 생성하는
+문서의 모든 내용을 담고 있습니다.
+
+.getElementById()
+메서드 : document 객체가 가지고 있는 함수입니다.
+역할 : 이 메서드는 괄호() 안에 전달된 문자열과 동일한 id 속성을 가진 HTML 요소를 찾아서
+반환합니다. 만약 해당하는 요소가 없으면 null을 반환합니다.
+
+('todo-input')
+인자 : getElementById() 메서드에 전달되는 값입니다.
+의미 : 이 메서드는 id가 todo-input 인 HTML 요소를 찾으라는 명령을 수행합니다.
+
+종합 정리
+const todoInput = document.getElementById('todo-input');
+이 코드는 한 줄로 다음과 같은 의미를 가집니다.
+
+HTML 문서에서 id가 todo-input 인 요소를 찾아서, 그 요소를 todoInput 이라는 이름의 상수에
+할당해라.
+
+결과적으로, 이 코드를 실행하면 todoInput 이라는 변수는 <input type="text" id="todo-input">
+와 같은 HTML 요소를 가리키게 됩니다.
+이제 여러분은 이 todoInput 변수를 통해 해당 입력창의 값(todoInput.value)을 가져오거나,
+다른 속성을 변경하는 등 다양한 작업을 할 수 있습니다.
+
+
+
+DOM(Document Object Model)
+DOM은 Document Object Model 의 약자로, 웹 페이지를 구조화된 객체 형태로 나타낸 모델입니다.
+쉽게 말해, 웹 페이지를 구성하는 모든 요소(태그, 속성, 내용 등)를 트리(tree)형태의 객체 구조로 만들어서
+JavaScript 같은 프로그래밍 언어가 이 요소들에 접근하고 조작할 수 있도록 해주는 역할을 합니다.
+
+예를들어, HTML 코드가 아래와 같을 경우
+<body>
+    <div id="container">
+        <h1>투두리스트</h1>
+        <button>추가</button>
+    </div>
+</body>
+
+이 HTML 코드는 브라우저에 의해 DOM 이라는 아래와 같은 트리 구조로 변환됩니다,.
+document(최상위 객체)
+    html
+        head
+        body
+            div(id : 'container')
+                h1 (텍스트 : '투두리스트')
+                button (텍스트 : '추가')
+
+이렇게 객체화된 덕분에, JavaScript 코드로 h1 태그의 내용을 바꾸거나,
+button을 클릭했을 때 특정 동작을 실행하는 등의 작업을 할 수 있습니다.
+
+DOMContentLoaded
+DOMContentloaded 는 HTML 문서의 로딩이 완료되었을 때 발생하는 이벤트입니다.
+
+웹 브라우저가 HTML파일을 읽고 모든 요소들을 DOM트리로 변환하는 과정이 끝나면,
+바로 이 DOMContentLoaded 이벤트가 발생합니다.
+
+이 이벤트가 중요한 이유는 다음과 같습니다.
+
+요소 조작의 안정성 : JavaScript코드가 HTML 요소를 조작하려면, 그 요소가 먼저 DOM트리에 존재해야
+합니다.
+만약 DOM이 완성되기 전에 코드가 실행되면, 원하는 요소를 찾지 못해 오류가 발생할 수 있습니다.
+
+document.addEventListener('DOMContentLoaded', () => {...});
+코드는 이 이벤트를 감지하여 HTML문서가 준비된 후에야 비로소 중괄호{} 안의 JavaScript코드를 실행하도록
+보장해줍니다.
+
+즉, 페이지의 HTML구조가 모두 만들어졌으니 이제 JavaScript로 이 구조를 조작해도 안전하다
+는 신호와 같습니다.
+
+헷갈릴 수 있는 다른 이벤트로는 load 이벤트가 있는데, 이는 HTML뿐만 아니라 페이지에 있는 모든
+리소스(이미지, CSS, 다른 스크립트 파일 등) 까지 완전히 로딩된 후에 발생합니다.
+보통은 HTML 요소 조작만 필요하므로 DOMContentLoaded 를 사용하는 것이 더 빠르고 효율적입니다.
+
+
+
+function fetchTodos(filter = 'all') {
+}
+
+문법적 요소 해설
+function
+키워드 : JavaScript 에서 함수를 선언할 때 사용하는 키워드입니다.
+함수는 특정 작업을 수행하는 코드 불록을 의미합니다.
+
+fetchTodos
+함수 이름 : 직접 정하는 이름입니다.
+의미 : 이 함수가 어떤 역할을 하는지 나타냅니다.
+fetch(가져오다)와 Todos(할 일들)가 결합되어 있어
+"할 일 목록을 가져오는 함수"라는 것을 명확하게 알 수 있습니다.
+
+(filter = 'all')
+매개변수(Parameter) : 함수가 호출될 때 외부로부터 전달받는 값입니다.
+여기서는 filter라는 이름의 매개변수를 받습니다.
+= : 매개변수에 기본값(Default Value)을 할당하는 문법입니다.
+'all' : filter 매개변수에 할당된 기본값입니다.
+
+종합정리
+function fetchTodos(filter = 'all') {
+}
+이 한줄은 다음과 같은 의미를 가집니다.
+->
+" fetchTodos 라는 이름의 함수를 선언하는데, 이 함수는 filter 라는 매개변수를 받는다.
+만약 함수를 호출할 때 filter에 아무런 값을 넘겨주지 않으면, filter의 값은 자동으로 'all'이 된다.
+즉, 이 함수는 다음과 같이 호출할 수 있습니다.
+fetchTodos() : filter에 아무 값도 전달하지 않았으므로, filter의 값은 기본값인 'all'이 됩니다.
+fetchTodos('completed') : filter에 'completed' 라는 값이 전달되었으므로, filter의 값은 'completed'가 됩니다.
+이처럼 매개변수에 기본값을 설정하는 문법을 사용하면,
+함수를 더 유연하게 호출할 수 있고 불필요한 오류를 줄일 수 있습니다.
+
+
+let url = API_URL;
+위 코드는 변수 url에 "API_URL"이라는 값을 할당(저장)하는 것입니다.
+
+let
+자바스크립트에서 변수를 선언할 때 사용하는 키워드입니다.
+let으로 선언된 변수는 재할당이 가능합니다.(const는 재할당이 불가능합니다.)
+
+url
+이 변수의 이름입니다.
+
+=
+할당 연산자입니다. 오른쪽 값을 왼쪽에 있는 변수에 저장하라는 의미입니다
+
+API_URL
+일반적으로 상수(Constant) 또는 전역변수(Global Variable)의 이름입니다.
+API_URL 이라는 이름만 보고도 'API 주소'라는 것을 쉽게 알 수 있습니다.
+즉, "앞으로 API 주소가 필요할 때마다 url 이라는 변수를 사용해" 라는 의미로 이해하면 됩니다.
+
+
+if (filter === 'incomplete')
+filter 변수의 값이 'incomplete'와 같다면
+url = '${API_URL}/incomplete'
+url 변수에 ${API_URL}/incomplete 라는 새로운 값을 할당합니다.
+이 주소는 미완료된 목록을 가져오는 API 엔드포인트가 될 것입니다.
+
+else if(filter === 'completed') : if 문이 거짓이고, filter 변수의 값이 'completed'와 같다면
+url = '${API_URL}/completed';
+url 변수에 ${API_RUL}/completed 라는 새로운 값을 할당합니다.
+이 주소는 완료된 목록을 가져오는 API 엔드포인트가 될 것입니다.
+
+결론적으로, 이 코드는 사용자가 "미완료" 목록을 보고 싶어하는지, "완료"목록을 보고 싶어하는지에 따라
+적절한 API 주소를 동적으로 결정하는 역할을 합니다.
+
+
+
+
+// fetch API를 사용해 서버에 GET요청을 보냅니다.
+// 이전에 정의된 'url' 변수에 따라 다른 주소로 요청을 보낼 수 있습니다.
+fetch(url)
+    // 서버로부터 응답이 오면 실행됩니다.
+    // .then() 은 Promise 가 성공적으로 완료 되었을 때 실행되는 콜백 함수를 받습니다.
+    .then(response => {
+        // 응답(response)을 JSON 형식으로 파싱합니다.
+        // 이 과정도 비동기적으로 처리되므로 또 다른 Promise를 반환합니다.
+        return response.json();
+    })
+    // JSON 변환이 완료되면 실행됩니다.
+    // 'todos' 변수에 서버에서 가져온 투주 목록(JSON 배열)이 담ㄱ비니다.
+    .then(todos => {
+        // todoList는 투두 목록이 표시되는 HTML 요소(예: <ul>, <ol>)입니다.
+        // 기존에 화면에 있던 목록을 모두 비워줍니다.
+        todoList.innerHTML = '';
+
+        // 서버에서 가져온 'todos' 배열의 각 항목(todo)에 대해 반복 작업을 수행합니다.
+        todos.fotEach(todo => {
+            // 각 투두 항목을 화면에 추가하는 함수를 호출합니다.
+            // 이 함수는 'todo' 객체를 받아 HTML 요소를 생성하고 todoList에 추가하는 역할
+            addTodoList(todo);
+        });
+    });
+    // fetch나 .then()  과정에서 오류가 발생하면 실행됩니다.
+    // .catch()는 Promise가 실패(rejected)했을 때 실행되니다.
+    .catch(error => {
+        // 오류 메시지를 개발자 도구의 콘솔에 빨간색으로 출력합니다.
+        console.error('Error fetching todos', error);
+    });
+
+    코드해설
+    fetch(url)
+    url 변수에 저장된 주소로 네트워크 요청을 보냅니다.
+    fetch 함수는 비동기 작업이며,요청에 대한 응답을 받으면 Promise 객체를 반환합니다.
+
+
+    .then(response => response.json())
+    서버로부터 응답(response)이 오면, 그 응답을 JSON형식으로 반환합니다.
+    이 작업 또한 비동기적이기 때문에 Promise를 반환합니다
+
