@@ -632,3 +632,50 @@ li.dateset.id = todo.id;
 
 코드 해석
 li "이전에 document.createElement('li')로 생성된 <li> html 요소를 가리키는 변수입니다.
+
+
+actionButtons.appendChild(toggleBtn);
+
+이 코드는 toggleBtn 이라는 버튼 요소를  actionButtons 라는 요소의 자식 으로 추가하는 역할을 합니다.
+
+쉽게 설명하면, html페이지에 이미 있는 actionButtons 라는 상자 안에 toggleBtn 이라는 새로운 버튼을 넣는다고 생각하면 됩니다.
+
+actionBttons: 버튼을 담을 부모(Parent) html 요소입니다.
+
+.appendChild() : javascript 에서 DOM(document object model) 요소를 특정 요소의 마지막 자식으로 추가하는 메서드입니다
+
+toggleBtn
+actionButtons 안에 새로 추가될 자식 html 요소입니다.
+
+
+editBtn.addEventListener('click', () => editTodo(todo, li, todoText, actionButtons));
+
+이 요소는 editBtn 이라는 요소(버튼)를 클릭했을 때, 특정 함수(editTodo)를 실행하도록 설정하는 역할을 합니다.
+
+코드 구성 요소
+editBtn
+'수정' 버튼을 나타내는 요소입니다.
+
+.addEventListener('click', ... )
+JavaScript 에서 특정 이벤트(여기서는 'click')가 발생했을 때,
+미리 정의된 함수를 호출하도록 연결하는 메서드입니다.
+
+() => editTodo(...)
+화살표 함수(Arrow function) 문법으로, 클릭 이벤트가 발생하면 editTodo 함수를 호출하겠다는 의미입니다.
+
+editTodo(todo, li, todoText, actionButtons)
+클릭 이벤트가 발생했을 때 실제로 실행될 함수와,
+이 함수에 전달되는 네 가지 인자(argument)들입니다.
+
+todo
+수정할 할 일의 데이터 객체입니다.
+li
+해당 할 일 항목 전체를 담고 있는 <li> 요소입니다.
+todoText
+할 일 내용 텍스트가 담긴 요소입니다.
+actionButtons
+수정, 삭제 버튼을 담고있는 컨테이너 요소입니다.
+
+결론적으로, 이 코드는 사용자가 수정 버튼을 누르면 editTodo 함수가 실행되면서
+현재 할 일 항목에 대한
+모든 정보를 함수에 전달하여 할 일을 수정할 수 있도록 준비하는 과정이라고 이해하시면 됩니다.
