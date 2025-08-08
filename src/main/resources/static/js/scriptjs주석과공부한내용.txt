@@ -679,3 +679,35 @@ actionButtons
 결론적으로, 이 코드는 사용자가 수정 버튼을 누르면 editTodo 함수가 실행되면서
 현재 할 일 항목에 대한
 모든 정보를 함수에 전달하여 할 일을 수정할 수 있도록 준비하는 과정이라고 이해하시면 됩니다.
+
+
+
+// 수정 내용 저장 함수
+// 할 일 수정 내용을 서버에 저장하는 함수
+function saveTodo(todo, newTitle, li) {
+    // 기존 투두 객체를 복사하고, 제목(title)만 새로운 값으로 업데이트
+    const updatedTodo = {
+        ...todo, // 기존 todo 객체의 모든 속성을 가져옴
+        title: newTitle // title만 새로운 제목(newTitle)로 덮어씀
+    };
+
+    // 서버의 특정 할 일 항목(todo.id)에 수정된 내용을 보내는 API 요청
+    fetch(`${API_URL}/${todo.id}`, {
+        method : 'PUT', // 'PUT' 메서드는 기존 자원을 완전히 새로운 내용으로 교체할 때 사용
+        headers: {
+            'Content-Type' : 'application/json', // 보내는 데이터 형식이 JSON임을 명시
+        },
+        body: JSON.stringfy(updatedTodo), // 업데이트할 데이터를 JSON 문자열로 변환하여 본문에 담음
+    })
+    body: JSON.stringfy(updatedTodo), // 업데이트할 데이터를 JSON 문자열로 변환하여 본문에 담음
+})
+    .then(response => response.json()) // 서버응답을 JSON 형식으로 파싱
+    .then(updatedItem => {
+        // 서버에서 업데이트된 항목을 성공적으로 받으면 아래 코드 실행
+        li.remove();    // 기존 html 목록 항목(li)을 화면에서 제거
+        addTodoToList(updatedItem); // 서버에서 받은 최신 데이터로 새로운 항목을 다시 추가
+        updateListBaseOnFilter(); // 필터 상태에 따라 화면을 최신화
+    })
+    .catch(error => console.error('투두를 업데이트하는 중 오류 발생:', error));
+    // API 호출을 중 오류가 발생하면 콘솔에 에러 출력
+}

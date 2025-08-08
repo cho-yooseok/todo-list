@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     addTodoToList(todo);
                 });
             })
-            .catch(error => console.error('Error fetching todos:', error));
+            .catch(error => console.error('투두리스트를 불러오는 중 오류 발생:', error));
     }
 
     // 투두 아이템을 DOM에 추가하는 함수
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 todoInput.value = ''; // 입력창 비우기
                 updateListBasedOnFilter();
             })
-            .catch(error => console.error('Error adding todo:', error));
+            .catch(error => console.error('투두를 추가하는 중 오류 발생:', error));
     });
 
     // 할 일 수정 함수
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 addTodoToList(updatedItem);
                 updateListBasedOnFilter();
             })
-            .catch(error => console.error('Error updating todo:', error));
+            .catch(error => console.error('투두를 업데이트하는 중 오류 발생:', error));
     }
 
     // 완료 상태 토글 함수
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleBtn.textContent = updatedTodo.completed ? '미완료' : '완료';
                 updateListBasedOnFilter();
             })
-            .catch(error => console.error('Error toggling todo:', error));
+            .catch(error => console.error('투두 상태를 토글하는 중 오류 발생:', error));
     }
 
     // 투두 삭제 함수
@@ -172,10 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     li.remove();
                 } else {
-                    console.error('Error deleting todo:', response.statusText);
+                    console.error('투두를 삭제하는 중 오류 발생:', response.statusText);
                 }
             })
-            .catch(error => console.error('Error deleting todo:', error));
+            .catch(error => console.error('투두를 삭제하는 중 오류 발생:', error));
     }
 
     // 필터링 버튼 이벤트 리스너
