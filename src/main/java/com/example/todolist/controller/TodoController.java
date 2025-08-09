@@ -1,92 +1,74 @@
 package com.example.todolist.controller;
 
-import com.example.todolist.model.Todo;
-import com.example.todolist.repository.TodoRepository;
+import com.example.todolist.dto.TodoRequestDto;
+import com.example.todolist.dto.TodoResponseDto;
+import com.example.todolist.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
 public class TodoController {
 
     @Autowired
-    private TodoRepository todoRepository;
+    private TodoService todoService;
 
     // 모든 Todo 조회
     @GetMapping
-    public List<Todo> getAllTodos() {
-        return todoRepository.findAll();
+    public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
+        return ResponseEntity.ok(todoService.getAllTodos());
     }
 
     // 새 Todo 생성
     @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoRepository.save(todo);
+    public ResponseEntity<TodoResponseDto> createTodo(@Valid @RequestBody TodoRequestDto requestDto) {
+        return ResponseEntity.ok(todoService.createTodo(requestDto));
     }
 
-    // Todo 업데이트
+    // Todo 업데이트 (내용만 수정)
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todoDetails) {
-        Optional<Todo> optionalTodo = todoRepository.findById(id);
-
-        if (optionalTodo.isPresent()) {
-            Todo todo = optionalTodo.get();
-            todo.setTitle(todoDetails.getTitle());
-            todo.setCompleted(todoDetails.getCompleted());
-            return ResponseEntity.ok(todoRepository.save(todo));
+    public ResponseEntity<TodoResponseDto> updateTodo(@PathVariable Long id, @Valid @RequestBody TodoRequestDto requestDto) {
+        try {
+            return ResponseEntity.ok(todoService.updateTodo(id, requestDto));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.notFound().build();
     }
 
     // Todo 완료 상태 토글
     @PatchMapping("/{id}/toggle")
-    public ResponseEntity<Todo> toggleTodo(@PathVariable Long id) {
-        Optional<Todo> optionalTodo = todoRepository.findById(id);
-
-        if (optionalTodo.isPresent()) {
-            Todo todo = optionalTodo.get();
-            todo.setCompleted(!todo.getCompleted());
-            return ResponseEntity.ok(todoRepository.save(todo));
+    public ResponseEntity<TodoResponseDto> toggleTodo(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(todoService.toggleTodo(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.notFound().build();
     }
 
     // Todo 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
-        if (todoRepository.existsById(id)) {
-            todoRepository.deleteById(id);
+        try {
+            todoService.deleteTodo(id);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-    }
-
-    // 완료 상태별 조회
-    @GetMapping("/status/{completed}")
-    public List<Todo> getTodosByStatus(@PathVariable Boolean completed) {
-        return todoRepository.findByCompleted(completed);
-    }
-
-    // 제목으로 검색
-    @GetMapping("/search")
-    public List<Todo> searchTodos(@RequestParam String title) {
-        return todoRepository.findByTitleContainingIgnoreCase(title);
     }
 
     // 미완료 항목 (최신순)
     @GetMapping("/incomplete")
-    public List<Todo> getIncompleteTodos() {
-        return todoRepository.findIncompleteOrderByCreatedAtDesc();
+    public ResponseEntity<List<TodoResponseDto>> getIncompleteTodos() {
+        return ResponseEntity.ok(todoService.getIncompleteTodos());
     }
 
     // 완료 항목 (최신순)
     @GetMapping("/completed")
-    public List<Todo> getCompletedTodos() {
-        return todoRepository.findCompletedOrderByUpdatedAtDesc();
+    public ResponseEntity<List<TodoResponseDto>> getCompletedTodos() {
+        return ResponseEntity.ok(todoService.getCompletedTodos());
     }
+
 }

@@ -4,26 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>투두리스트</title>
+    <!-- 외부 CSS 파일 및 웹 폰트 로드 -->
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- 전체 애플리케이션을 감싸는 메인 컨테이너 -->
 <div class="container">
     <h1>투두리스트</h1>
+
+    <!-- 새로운 할 일을 입력하고 추가하는 영역 -->
     <div class="input-container">
+        <!-- JS에서 입력 값을 가져오기 위해 'todo-input' id를 사용 -->
         <input type="text" id="todo-input" placeholder="새로운 할 일을 추가하세요">
+        <!-- JS에서 클릭 이벤트를 감지하기 위해 'add-button' id를 사용 -->
         <button id="add-button">추가</button>
     </div>
 
+    <!-- 할 일 목록을 필터링하는 버튼 그룹 -->
     <div class="filter-container">
+        <!-- JS는 각 버튼의 id를 이용해 어떤 필터를 적용할지 결정 -->
         <button id="show-all" class="active">모두</button>
         <button id="show-incomplete">미완료</button>
         <button id="show-completed">완료</button>
     </div>
 
+    <!-- JS를 통해 할 일(li)들이 동적으로 추가될 목록 영역 -->
     <ul id="todo-list"></ul>
 </div>
 
+<!-- 페이지의 HTML 요소가 모두 로드된 후 실행되도록 body 태그가 끝나기 직전에 스크립트를 연결 -->
 <script src="js/script.js"></script>
+
 </body>
 </html>

@@ -1012,3 +1012,188 @@ document.querySelectorAll 을 사용해
 이 함수는 여러 버튼 중 오직 하나만 활성화 상태를 유지해야 하는 UI(예 : 탭 메뉴, 필터 버튼) 를 만들 때 유용하게
 사용됩니다.
 
+
+
+// 현재 활성화된 필터에 따라 목록을 업데이트하는 함수
+function updateListBasedOnFilter() {
+    // 1. '.filter-container' 내부에서 'active' 클래스를 가진 버튼 요소를 찾스빈다.
+    // 'active' 클래스는 현재 선택된(활성화된) 필터 버튼을 의미합니다.
+    const activeFilterBtn = document.quertySelector('.filter-container button.active');
+
+    // 2. 필터 상태를 저장할 변수를 선언하고, 기본값을 'all'로 설정합니다.
+    let filter = 'all';
+
+    // 3. 어떤 버튼이 활성화되었는지 확인하여 'filter' 변수의 값을 변경합니다.
+    // 만약 활성화된 버튼이 '미완료' 버튼이라면
+    if (activeFilterBtn === showIncompleteBtn) {
+        filter = 'incomplete'; // 'filter'를 'incomplete'로 설정
+    }
+    // 만약 활성화된 버튼이 '완료'버튼이라면
+    else if (activeFilterBtn === showCompletedBtn) {
+        filter = 'completed'; // 'filter'를 'completed'로 설정
+    }
+    // 'all' 버튼이 활성화되어 있거나 다른 버튼이 활성화되어 있지 으면 'filter'는 초기값 'all'을 유지합니다.
+
+    // 4. 결정된 'filter' 값에 따라 할 일 목록(todo list) 을 불러오는 함수를 호출합니다.
+    // 이 함수는 'all', 'incomplete', 'completed' 중 하나의 필터 값을 인수로 받습니다.
+    fetchTodos(filter);
+}
+
+// 이 코드는 'DOMContentLoaded' 이벤트가 발생했을 때 실행되는 블록의 일부
+// 이는 문서(페이지)가 완전히 로드되면 다음 코드를 실행하라는 의미
+// 페이지가 로드되자마자 전체 할 일 목록을 불러오는 함수를 호출
+fetchTodos();
+
+코드 해석
+이 코드는 사용자가 선택한 필터(전체, 완료, 미완료)에 따라 화면에 표시되는 목록을 변경하는 로직을 담고 있습니다.
+
+updateListBasedOnFilter() 함수
+이 함수는 버튼을 클릭했을 때 호출됨
+
+const activeFilterBtn = document.querySelector('.filter-container button.active');
+document.querySelector() 주어진css 선택자와 일치하는 첫 번째 요소를 반환합니다.
+'.filter-container button.active' 는 .filter-container' 라는 클래스를 가진 요소의 자식중
+'active'클래스를 가진 <button>을 찾아달라는 의미
+이 코드를 통해 현재 활성화된(선택된) 필터 버튼 요소를 activefilterBtn 변수에 할당합니다.
+
+let filter = 'all';
+filter 라는 변수를 선언하고 기본값을 'all'로 지정합니다. 이 변수는 fetchTodos 함수에 전달할 필터타입을 결정합니다.
+
+if(...) else if(...)
+activeFiletBtn === showIncompleteBtn
+activeFilterBtn 변수에 담긴 요소가 이전에 선언된 showIncompleteBtn 변수(미완료 버튼 요소)어ㅘ 동일한 요소인지 비교합니다
+
+만약 true 라면, filter 변수의 값을 'incomplete'로 변경합니다.
+else if 는 '미완료'버튼이 아니엇을 경우, '완료'버튼인지 다시확인 하는 조건문입니다.
+만약 두 조건 모두 false 라면, filter 변수는 초기값인 'all'을 그대로 유지하게 됩니다.
+이는 '전체'버튼이 활성화되었거나 어떤 필터도 선택되지 않은 상태일 경우에 해당합니다.
+
+
+fetchTodos(filter);
+마지막으로, 위 조건문을 통해 최종적으로 결정된 filter 변수의 값('all', 'incomplete', 'completed')을
+인수로 전달하여 fetchTodos 함수를 호출합니다.
+
+이 fetchTodos 함수는 백엔드 서버에서 필터링된 할 일 목록 데이터를 가져와서 화면에 표시하는 역할을 할 것으로 예상됩니다.
+
+
+// 필터 버튼 활성화 상태를 변경하는 함수를 정의합니다.
+// 이 함수는 클릭된 특정 버튼을 활성화하고, 다른 모든 버튼의 활성화를 해제하는 역할을 합니다.
+function setActiveFilter(activeButton) {
+// function : 함수를 정의하는 키워드입니다.
+// setActiveFilter : 함수의 이름입니다.
+// (activeButton) : 함수의 매개변수입니다.
+// 이 함수가 실행될 때 외부에서 전달받는 값(여기서는 활성화하려는 특정 버튼 요소)을 activeButton 이라는 이름으로 사용하겠다 라는
+// 의미입니다.
+    // 1. '.function-container' 클래스를 가진 요소 내의 모든 <button> 요소를 찾습니다.
+    // querySelectorAll 은 조건에 맞는 모든 요소를 NodeList 형태로 반환합니다.
+    document.querySelectorAll('.filter-container button').forEach(btn => {
+
+    )
+
+}
+
+
+document.querySeletorAll('.filter-container button').forEach(btn => {...})
+
+1. document.querySelectorAll('.filter-container button') :
+뜻 : html 문서에서 .filter-container 라는 클래스를 가진 요소 안에 있는 <button>을 찾아줘
+예시 :
+만약 html에 아래와 같은 버튼들이 있다면, 이 코드 덕분에 3개의 버튼 모두를 한꺼번에 찾게 됩니다.
+
+HTML
+<div class ="filter-container">
+    <button class="active">전체</button>
+    <button>미완료</button>
+    <button>완료</button>
+</div>
+
+결과 : 이 코드는 찾은 버튼들을 하나의 목록(NodeList)으로 만들어 줍니다. 마치 버튼 3개가 담긴 상자 하나를 만든 것과 같다고
+생각하면 쉽다.
+
+2. .forEach(btn => {...})
+뜻 : 방금 찾은 버튼들의 목록(상자)를 하나씩 꺼내면서, 각 버튼에 대해 특정 동작을 반복해줘.
+예시 : 상자 안에 있는 버튼 3개를 하나씩 꺼내는 과정입니다.
+1번 버튼(전체)을 꺼내서...
+2번 버튼(미완료)을 꺼내서...
+3번 버튼(완료)을 꺼내서...
+
+btn
+여기서 btn은 반복문이 돌 때마다 상자에서 꺼낸 하나의 버튼을 가리키는 이름입니다.
+처음에는 전체 버튼, 다음에는 미완료 버튼, 그 다음에는 완료 버튼을 의미합니다.
+
+코드 전체 해석
+document.querySelectorAll('filter-container button').forEach(btn => {
+btn.calssList.remove('active'); });
+
+이 코드는 .filter-container 안에 있는 모든 버튼을 찾아서, 각각의 버튼에 대해 active 클래스를 제거해! 라는 의미입니다.
+
+이동작을 통해, 어떤 버튼을 클릭하던 항상 모든 버튼이 active 클래스를 먼저 없애서 초기화 하는 과정을 가지게 됩니다.
+이렇게 해야만 새로운 버튼에 active 클래스를 추가했을 때 오직 하나만 활성화 상태로 남게 됩니다.
+
+
+예시코드 (전체 동작)
+아래 코드 버튼을 클릭하면
+active 클래스를 추가하고 제거하는 과정을 보여줍니다.
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title> 필터 버튼 예제</title>
+    <style>
+        .filter-container {
+            margin: 20px;
+        }
+        .filter-container button {
+            padding: 10px 20ps
+        }
+        .filter-container button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1pc solid #ccc;
+            background-coler: #f0f0f0;
+        }
+        .filter-container button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class = "filter-container">
+    <button class ="active"> 전체 </button>
+    <button> 미완료 </button>
+    <button> 완료 </button>
+</div>
+
+<script>
+    // 필터 버튼 활성화 상태 변경 함수
+    function setActiveFilter(activeButton) {
+        // 1. 모든 필터 버튼을 찾아서 'active' 클래스를 제거합니다.
+        document.querySelectorAll('.filter-container button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // 2. 함수에 전달된(클릭된) 버튼에만 'active' 클래스를 추가합니다.
+        activeButton.classList.add('active');
+    }
+
+    // 모든 버튼에 클릭 이벤트 리스너를 추가합니다.
+    document.querySelectorAll('.filter-container button').forEach(button => {
+        button.addEventListener('click, function()' {
+            // 클릭된 버튼을 인수로 전달하며 함수를 호출합니다.
+            setActiveFilter(this);
+        });
+    }):
+</script>
+
+</body>
+</html>
+
+위 예시 코드에서 버튼을 클릭하면, setActiveFilter 함수가 호출됩니다. 그러면
+document.querySelectorAll('.filter-container button').forEach(...) 부분이 실행되면서
+모든 버튼의 active 클래스가 사라지고, 마지막으로 activeButton.classList.add('active');
+덕분에 클릭한 버튼에만 active 클래스가 다시 추가됩니다.
+

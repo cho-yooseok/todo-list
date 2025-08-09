@@ -1,3 +1,4 @@
+/* --- 기본 레이아웃 및 폰트 설정 --- */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #f0f2f5;
@@ -8,6 +9,7 @@ body {
     margin: 0;
 }
 
+/* --- 전체 앱을 감싸는 컨테이너 --- */
 .container {
     width: 100%;
     max-width: 500px;
@@ -23,6 +25,7 @@ h1 {
     margin-bottom: 25px;
 }
 
+/* --- 상단 입력 및 필터 영역 --- */
 .input-container {
     display: flex;
     gap: 10px;
@@ -69,6 +72,7 @@ h1 {
     transition: all 0.2s;
 }
 
+/* 활성화된 필터 버튼 스타일 */
 .filter-container button.active {
     background-color: #007BFF;
     color: white;
@@ -79,6 +83,7 @@ h1 {
     background-color: #eee;
 }
 
+/* --- 투두 리스트 아이템 목록 --- */
 #todo-list {
     list-style-type: none;
     padding: 0;
@@ -96,6 +101,7 @@ h1 {
     transition: all 0.2s;
 }
 
+/* '완료' 상태의 리스트 아이템 스타일 */
 #todo-list li.completed {
     background-color: #e9f5e9;
 }
@@ -105,14 +111,16 @@ h1 {
     cursor: pointer;
     font-size: 17px;
     color: #555;
-    word-break: break-all;
+    word-break: break-all; /* 긴 텍스트가 영역을 벗어나지 않도록 줄바꿈 처리 */
 }
 
+/* '완료' 상태의 텍스트 스타일 (취소선) */
 .todo-text.completed-text {
     text-decoration: line-through;
     color: #999;
 }
 
+/* --- 아이템 우측의 액션 버튼 영역 --- */
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -141,7 +149,7 @@ h1 {
     color: #45a049;
 }
 
-/* 수정 기능 관련 스타일 */
+/* --- 수정 모드 전용 스타일 --- */
 .edit-input {
     flex-grow: 1;
     padding: 8px;
