@@ -711,3 +711,304 @@ function saveTodo(todo, newTitle, li) {
     .catch(error => console.error('투두를 업데이트하는 중 오류 발생:', error));
     // API 호출을 중 오류가 발생하면 콘솔에 에러 출력
 }
+
+상세 해설
+이 saveTodo 함수는 사용자가 수정한 할 일 내용을 서버에 저장하고,
+화면을 업데이트하는 역할을 합니다.
+
+1. 데이터 준비(updatedTodo)
+const updatedTodo = {... todo, title: newTitle};
+코드는 기존 할 일 객체(todo)의 모든 속성을 그대로 가져오면서,
+title 속성만 사용자가 새로 입력한 값(newTitle)으로 덮어씁니다.
+
+이렇게 하면 completed와 같은 다른 속성은 유지되면서 제목(여기서는 내용)만 변경된 새로운 객체가 만들어집니다.
+
+2. 서버에 데이터 전송(fetch)
+fetch(API_URL)/{todo.id}, {...}) 는 서버의 특정 API 엔드포인트
+(http://localhost:8080/api/todos/1와 같은 주소)로 네트워크 요청을 보냅니다.
+method: 'PUT'은 기존 데이터를 새로운 데이터로 완전히 대체하겠다는 의미입니다.
+body: JSON.stringify(updatedTodo)는 수정된 데이터를 JSON 형식의 문자열로 변환하여
+요청 본문에 담습니다.
+
+3. 응답처리 ( .then())
+then(response => response.json())
+서버에서 받은 응답을 JSON 형식으로 변환합니다.
+
+then(updatedItem => {...})
+성공적으로 처리된 후 실행되는 부분입니다.
+
+li.remove()
+기존에 화면에 있던 할 일 항목을 지웁니다.
+
+addTodoToList(updatedItem)
+서버에서 받은 최신 데이터(updatedItem)로 새로운 HTML요소를 만들어 화면에 추가합니다.
+이렇게 하면 화면에 표시되는 내용이 서버 데이터와 정확히 일치하게 됩니다.
+
+updateListBasedOnFilter()
+혹시 모를 필터링 오류를 방지하고 화면을 최신 상태로 유지하기 위해 필터 업데이틀 함수를 호출합니다.
+
+4. 오류 처리( .catch() )
+catch(error=> ...)
+fetch 요청이 실패햇을 경우, 콘솔에 에러 메시지를 출력 하여 문제를 추적할 수 있도록 돕니다.
+
+
+function saveTodo(todo, newTitile, li) {
+}
+saveTodo 함수는 할 일 항목의 제목을 수정하고, 그 내용을 서버에 저장한 다음, 화면을 업데이트하는 역할을 합니다.
+
+saveTodo 함수 해석
+이 함수는 3개의 인자를 받습니다.
+
+todo : 수정하려는 할 일의 기존 데이터를 담고 있는 객체입니다. (예 : {id : 1, title: '기존 내용'})
+newTitle : 사용자가 입력한 새로운 할 일 제목입니다.
+li : 수정하려는 할 일 항목을 나타내는 <li> HTML 요소입니다.
+
+코드 실행 과정
+1. 데이터 준비
+const updatedTodo = {
+    ...todo,
+    title: newTitle
+};
+
+...todo 는 전개 구문(spread syntax)으로 기존 todo 객체의 모든 속성을 그대로 복사합니다,
+그런 다음 title: newTitle 로 제목만 사용자가 입력한 새로운 값으로 덮어씁니다. 이렇게 해서
+completed 와 같은 다른 정보는 유지하면석 제목만 변경된 새로운 할 일 객체를 만듭니다.
+
+2. 서버에 수정 요청
+fetch(`${API_URL}/${todo.id}`, {
+    method: 'PUT',
+    headers: { /* ... */ },
+    body: JSON.stringify(updatedTodo),
+})
+
+fetch를 이용해 서버에 네트워크 요청을 보냅니다.
+method: 'PUT' : PUT 메서드는 기존 데이터를 새로운 데이터로 완전히 교체할 때 사용됩니다.
+body: JSON.stringify(updatedTodo)
+수정된 할 일 객체를 JSON 형식의 문자열로 변환하여 서버로 전송합니다
+
+3. 응답 처리 및 화면 업데이트
+
+.then(response = > response.json())
+.then(updatedItem => {
+    li.remove();
+    addTodoToList(updatedItem);
+    updateListBasedOnFilter();
+})
+
+서버에서 수정이 완료되었다는 응답을 받으면, 다음 작업을 수행합니다.
+li.remove()
+화면에서 기존의 <li> 할 일 항목을 삭제합니다.
+
+addTodoToList(updatedItem)
+서버에서 받은 최신 데이터(updatedItem)를
+사용해 새로운 <li> 항목을 생성하고 목록에 추가합니다.
+이 과정을 통해 화면의 내용이 서버와 정확하게 일치하게 됩니다.
+
+updateListBasedOnFilter()
+혹시 모를 필터링 오류를 방지하고 화면을 최신상태로 유지하기 위해
+필터 업데이트 함수를 호출하빈다.
+요약하자면, 이 함수는 수정된 할 일 내용을 서버에 전송하고, 서버의 응답을 받아 기존 항목을 삭제한 뒤 최신
+내용으로 화면을 다시 그리는 역할을 합니다.
+
+
+
+// 수정 내용 저장 함수
+// 할 일 수정 내용을 서버에 저장하는 함수
+function saveTodo(todo, new Title, li) {
+    // 기존 투두 객체를 복사하고, 제목(title)만 새로운 값으로 업데이트
+    const updatedTodo = {
+        ... todo,   // 기존 todo 객체의 모든 속성을 가져옴
+        title: newTitle // title만 새로운 제목 (enwTitle)으로 덮어씀
+    };
+
+    // 서버의 특정 할 일 항목(todo.id)에 수정된 내용을 보내는 API 요청
+    fetch(`${API_URL}/${todo.id}`, {
+        method: 'PUT', // 'PUT' 메서드는 기존 자원을 완전히 새로운 내용으로 교체할 때 사용
+        headers: {
+            'Content-Type' : 'application/json', // 보내는 데이터 형식이 JSON임을 명시
+        },
+        body: JSON.stringify(updatedTodo), // 업데이트할 데이터를 JSON 문자열로 변환하여 본문에 담음
+    })
+    .then(response => reponse.json()) // 서버 응답을 JSON 형식으로 파싱
+    .then(updatedItem => {
+        // 서버에서 업데이트된 항목을 성공적으로 받으면 아래 코드 실행
+        li.remove();    // 기존 html 목록 항목(li)을 화면에서 제거
+        addTodoToList(updatedItem); // 서버에서 받은 최신 데이터로 새로운 항목을 다시 추가
+        uopdateListBasedOnFilter(); // 필터 상태에 따라 화면을 최신화
+    })
+    .catch(error => consol.error('투두를 업데이트하는 중 오류 발생: ', error)); // API 호출 중 오류가 발생하면 콘솔에 에러출력
+}
+요약하자면, 이 함수는 수정된 할 일 내용을 서버에 전송하고, 서버의 응답을 받아 기존 항목을 삭제한 뒤 최신 내용으로
+화면을 다시 그리는 역할을 합니다.
+
+
+
+
+// 수정 내용 저장 함수
+function saveTodo(todo, newTitle, li) {
+    const updatedtTodo = {
+        ... todo,
+        title: newTitle
+    };
+
+    fetch(`${API_URL}/${todo.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTodo),
+    })
+        .then(response => response.json())
+        .then(updatedItem => {
+            li.remove();
+            addTodoToList(updatedItem);
+            updateListBasedOnFilter();
+            })
+            .catch(error => console.error('투두를 업데이트하는 중 오류 발생:' , error ));
+}
+
+
+
+...todo 는 전개구문(Spread Syntax) 이라고 불리는  JavaScript 문법입니다.
+이 구문은 todo 객체의 모든 속성(property)을 그대로 펼쳐서 복사하는 역할을 합니다.
+
+전개 구문 (Spread Syntax)의 역할
+이 문법은 주로 새롱누 객체를 만들거나 배열을 복사할 때 사용됩니다.
+
+1. 객체 복사 및 병합
+새로운 객체를 만들 때, 기존 객체의 모든 속성을 그대로 가져오고 싶을 때 사용합니다.
+
+1. 객체 복사 및 병합
+새로운 객체를 만들 때, 기존 객체의 모든 속성을 그대로 가져오고 싶을 때 사용합니다.
+
+const todo = {
+    id: 1,
+    title: '커피 사기',
+    completed: false
+};
+
+// todo 객체의 모든 속성을 복사하여 새로운 객체(newTodo) 생성
+const newTodo = { ...todo};
+
+console.log(newTodo);
+// 출력: {id: 1, title: '커피 사기', completed: false}
+
+2. 객체 속성 업데이트
+가장 많이 사용되는 용도로, 기존 객체의 속성 중 일부만 변경하고 싶을 때 사용합니다.
+
+const todo = {
+    id: 1,
+    title: '커피 사기',
+    completed: false
+};
+
+// todo 객체를 복사하면서 title 속성만 '우유 사기'로 변경
+const updatedTodo = {
+    ...todo,
+    title: '우유 사기'
+};
+
+console.log(updatedTodo);
+// 출력: {id: 1 , title: '우유 사기', completed: false}
+
+위 코드처럼 ...todo를 먼저 작성하면, id, title, completed 가 복사됩니다.
+그 뒤에 title: '우유 사기'를 작성하면 복사된  title 속성이 새로운 값으로 덮어 씌워지게 됩니다.
+결론적으로, ...todo는 todo 객체에 있는 모든 속성을 가져와서 펼쳐 놓는 편리한 문법입니다.
+
+fetch(`${API_URL}/${todo.id}`, {
+}
+특정 할 일 항목을 수정하거나 삭제하기 위해 서버에 네트워크 요청을 보내는 명령입니다.
+
+코드해석
+fetch(...)
+웹 브라우저가 서버에 요청을 보내고 응답을 받을 수 있게 해주는 javascript입니다.
+
+
+
+
+
+주석
+// 필터 버튼 활성화 상태 변경 함수
+function setActiveFilter(activeButton) {
+    // 1. '.filter-container button' 클래스를 가진 모든 버튼을 찾습니다.
+    document.querySelectorAll('.filter-container button'.)forEach(btn => {
+        // 2. 각 버튼에서 'active' 클래스를 제거합니다.
+        btn.classList.remove('active');
+    });
+
+    // 3. 함수에 전달된 'activeButton'에 'active' 클래스를 추가합니다.
+    activeButton.classList.add('active');
+}
+
+문법적 요소별 상세 해석
+function setActiveFilter(activeButton) {...}
+funtion : 함수를 정의할 때 사용하는 키워드입니다.
+setActiveFilter
+함수의 이름입니다. 이 이름을 사용해 함수를 호출할 수 있습니다.
+(activeButton):
+매개변수(Parameter)입니다. 이 함수가 실행될 때 외부로부터
+activeButton 이라는 이름의 값을 전달받습니다. 이 값은 활성화시킬 버튼 요소를 의미합니다.
+
+document.querySelectorAll('.filter-container button')
+document : 현재 웹페이지(html문서) 전체를 나타내는 객체입니다.
+.querySelectorAll()
+document객체의 메서드로, CSS선택자를 사용해 해당하는 모든 요소를
+NodeList 형태로 반환합니다. NodeList는 배열과 유사한 객체로, 여러 개의 요소를 담고 있습니다.
+
+'.filter-container button'
+css 선택자입니다.    '.filter-container'라는 클래스를 가진 요소의 자식 중에서 <button> 태그를 가진 모든 요소를
+선택하라는 의미입니다.
+
+.forEach(btn => {...})
+.forEach()
+NodeList 나 배열과 같은 순회 가능한(iterable)객체의 메서드입니다. 이 메서드는 객체 안의 각 요소에 대해
+한 번씩 주어진 함수를 실행합니다.
+
+(btn => {...})
+화살표 함수 (Arrow Function) 문법입니다.
+forEach 메서드에 전달되는 콜백함수로, 각 요소에 대해 실행될 동작을 정의합니다.
+btn
+forEach가 순회하며 각 요소에 접근할 때, 현재 요소가 btn이라는 이름의 매개변수로 전달됩니다.
+
+=>
+화살표 함수 문법의 일부입니다.
+{...}
+함수가 실행될 코드 블록입니다.
+
+
+btn.classList.remove('active');
+
+btn
+forEach 루프의 현재 요소, 즉 각각의 버튼을 의미합니다.
+
+.classList
+HTML 요소가 가진 속성 중 하나로, 해당 요소에 적용된 클래스(class)목록을
+DOMTokenList 형태로 관리합니다.
+
+.remove('active')
+classList  객체의 메서드로, 지정된 클래스 이름('active')을 제거합니다.
+이 코드를 통해 모든 버튼에서 활성화 상태를 나타내는 active 클래스가 제거됩니다.
+
+activeButton.classList.add('active');
+activeButton
+함수의 매개변수로 전달된, 활성화시키고자 하는 특정 버튼입니다.
+.classList.add('active')
+classList 객체의 메서드로, 지정된 클래스이름('active')을 추가합니다.
+이 코드를 통해
+setActvieFilter 함수를 호출할 때 인수로 전달된 버튼에만 active클래스가 추가됩니다.
+
+
+
+코드의 논리적 흐름
+setActiveFilter(어떤 버튼) 함수가 호출됩니다.
+document.querySelectorAll 을 사용해
+'.filter-container' 안에 있는 모든 버튼을 찾습니다.
+.forEach를 사용해 찾은 모든 버튼을 하나씩 순회합니다.
+각 버튼에 대해 classList.remove('active')를 실행하여, 기존에 활성화되어 있던 모든 버튼의
+활성화 상태를 해제합니다.
+마지막으로, 함수를 호출활 대 전달받은 activeButton 에만 classList.add('active')를 실행하여
+해당 버튼만 활성화 상태로 만듭니다.
+
+이 함수는 여러 버튼 중 오직 하나만 활성화 상태를 유지해야 하는 UI(예 : 탭 메뉴, 필터 버튼) 를 만들 때 유용하게
+사용됩니다.
+
