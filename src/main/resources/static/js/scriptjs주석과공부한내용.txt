@@ -420,3 +420,196 @@ function addTodoToList(todo) {
     // (이 아래에는 아마도 실제 버튼들을 생성하고 이 div에 추가하는 코드가 이어질 것입니다.)
 }
 
+
+
+// 새로운 'span' HTML 요소를 생성하여 'todoText'라는 상수에 할당합니다.
+const todoText = document.createElement('span');
+
+// 'todoText' 요소의 클래스 이름을 'todo-text'로 설정합니다.
+// 이 클래스는 CSS 스타일링에 사용될 수 있습니다.
+todoText.className = 'todo-text';
+
+// 'todoText' 요소의 텍스트 내용을 'todo' 객체의 'title' 속성 값으로 설정합니다.
+// 예를 들어 todo.title이 "자바스크립트 공부"라면, span 태그 안에는 "자바스크립트 공부"라는 텍스트가 표시됩니다.
+todoText.textContent = todo.title;
+
+// 'todo' 객체의 'completed' 속성이 true인지 확인합니다.
+// 할 일 항목이 완료되었는지를 나타내는 조건문입니다.
+if (todo.completed) {
+    // 조건이 참이면(할 일이 완료되었으면), 'todoText' 요소의 클래스 리스트에 'completed-text'를 추가합니다.
+    // 이를 통해 완료된 할 일에만 별도의 CSS 스타일(예: 취소선)을 적용할 수 있습니다.
+    todoText.classList.add('completed-text');
+}
+
+
+
+// 'div' 요소를 생성하여 'actionButtons'라는 상수에 할당합니다.
+// 이 div는 여러 버튼들을 그룹으로 묶는 컨테이너 역할을 합니다.
+const actionButtons = document.createElement('div');
+
+// 'actionButtons' 요소의 클래스 이름을 'action-buttons'로 설정합니다.
+// CSS를 통해 버튼들을 감싸는 영역의 스타일을 지정할 수 있습니다.
+actionButtons.className = 'action-buttons';
+
+// --- 버튼 생성 ---
+
+// '수정' 버튼을 위한 'button' 요소를 생성합니다.
+const editBtn = document.createElement('button');
+// 수정 버튼의 클래스 이름을 'edit-btn'으로 설정합니다.
+editBtn.className = 'edit-btn';
+// 버튼에 표시될 텍스트를 '수정'으로 설정합니다.
+editBtn.textContent = '수정';
+
+// '완료/미완료' 상태 변경을 위한 토글 버튼을 생성합니다.
+const toggleBtn = document.createElement('button');
+// 토글 버튼의 클래스 이름을 'toggle-btn'으로 설정합니다.
+toggleBtn.className = 'toggle-btn';
+
+// todo 객체의 'completed' 상태에 따라 버튼의 텍스트를 다르게 설정합니다. (삼항 연산자 사용)
+// todo.completed가 true이면 '미완료'를, false이면 '완료'를 텍스트로 표시합니다.
+toggleBtn.textContent = todo.completed ? '미완료' : '완료';
+
+// '삭제' 버튼을 위한 'button' 요소를 생성합니다.
+const deleteBtn = document.createElement('button');
+// 삭제 버튼의 클래스 이름을 'delete-btn'으로 설정합니다.
+deleteBtn.className = 'delete-btn';
+// 버튼에 표시될 텍스트를 '삭제'로 설정합니다.
+deleteBtn.textContent = '삭제';
+
+// 'actionButtons' (div) 안에 생성된 세 개의 버튼(수정, 토글, 삭제)을 추가합니다.
+actionButtons.append(editBtn, toggleBtn, deleteBtn);
+
+// 이전에 생성된 li 요소 안에 할 일 텍스트(todoText)와 버튼 그룹(actionButtons)을 추가합니다.
+// li는 할 일 항목 하나를 나타내는 리스트 아이템입니다.
+li.append(todoText, actionButtons);
+
+// 최종적으로 완성된 li 요소를 'todoList'라는 상위 요소(아마도 <ul> 또는 <ol>)의 자식으로 추가합니다.
+// 이로써 화면에 새로운 할 일 항목이 보이게 됩니다.
+todoList.appendChild(li);
+
+
+
+
+// --- 각 버튼에 이벤트 리스너 할당 ---
+
+// '수정' 버튼(editBtn)에 'click' 이벤트 리스너를 추가합니다.
+// 버튼이 클릭되면, 화살표 함수 ()=>...가 실행됩니다.
+editBtn.addEventListener('click', () => {
+    // 'editTodo'라는 함수를 호출합니다.
+    // 이때 수정에 필요한 정보들(todo 객체, li 요소, todoText 요소, actionButtons 요소)을 인자로 전달합니다.
+    editTodo(todo, li, todoText, actionButtons);
+});
+
+// '토글' 버튼(toggleBtn)에 'click' 이벤트 리스너를 추가합니다.
+toggleBtn.addEventListener('click', () => {
+    // 버튼이 클릭되면 'toggleTodo' 함수를 호출합니다.
+    // 어떤 할 일을 토글할지 식별하기 위해 해당 할 일의 고유 ID(todo.id)를 인자로 전달합니다.
+    toggleTodo(todo.id);
+});
+
+// '삭제' 버튼(deleteBtn)에 'click' 이벤트 리스너를 추가합니다.
+deleteBtn.addEventListener('click', () => {
+    // 버튼이 클릭되면 'deleteTodo' 함수를 호출합니다.
+    // 어떤 할 일을 삭제할지 식별하기 위한 ID(todo.id)와, 화면에서 바로 제거하기 위한 li 요소를 인자로 전달합니다.
+    deleteTodo(todo.id, li);
+});
+
+
+
+
+/**
+ * '추가' 버튼 클릭 또는 'Enter' 키 입력 시 새로운 투두를 생성하는 비동기 함수
+ */
+async function handleAddTodo() {
+    // todoInput 요소(HTML 입력 필드)에서 사용자가 입력한 값의 앞뒤 공백을 제거하고 'title' 상수에 저장합니다.
+    const title = todoInput.value.trim();
+
+    // 입력값이 비어 있는지 확인합니다 (입력값 유효성 검사).
+    if (title === '') {
+        // 비어 있다면, 사용자에게 경고창을 띄웁니다.
+        alert('할 일을 입력해주세요.');
+        // 함수 실행을 즉시 중단합니다.
+        return;
+    }
+
+    // try...catch 블록을 사용하여 네트워크 요청과 같이 오류가 발생할 수 있는 코드를 실행합니다.
+    try {
+        // fetchHelper 함수를 사용해 서버(API_URL)에 POST 요청을 보냅니다.
+        // await 키워드는 서버의 응답이 올 때까지 이 함수의 실행을 일시 중지합니다.
+        await fetchHelper(API_URL, {
+            method: 'POST', // 데이터 생성을 의미하는 POST 메서드를 사용합니다.
+            headers: { 'Content-Type': 'application/json' }, // 전송하는 데이터의 형식이 JSON임을 명시합니다.
+            body: JSON.stringify({ title }), // 자바스크립트 객체를 JSON 문자열로 변환하여 요청 본문에 담아 보냅니다.
+        });
+
+        // 요청이 성공적으로 완료되면, 입력창을 비워 다음 입력을 준비합니다.
+        todoInput.value = '';
+        // 현재 설정된 필터에 맞춰 할 일 목록을 다시 불러와 화면을 새로고침합니다.
+        updateListBasedOnFilter();
+
+    // try 블록 안에서 오류가 발생하면 catch 블록이 실행됩니다.
+    } catch (error) {
+        // 개발자 확인을 위해 콘솔에 오류 메시지를 출력합니다.
+        console.error('투두 추가 오류:', error);
+        // 사용자에게 투두 추가에 실패했음을 경고창으로 알립니다.
+        alert(`투두를 추가하지 못했습니다: ${error.message}`);
+    }
+}
+
+
+
+
+
+/**
+ * 특정 투두 항목을 '수정 모드'로 변경하는 함수
+ * @param {object} todo - 수정할 할 일 데이터 객체 (id, title 등 포함)
+ * @param {HTMLElement} li - 해당 할 일이 포함된 li 요소
+ * @param {HTMLElement} todoText - 할 일 내용이 표시되는 텍스트 노드 또는 요소
+ * @param {HTMLElement} actionButtons - 수정/삭제 버튼이 담겨있는 컨테이너 요소
+ */
+function editTodo(todo, li, todoText, actionButtons) {
+    // 텍스트 수정을 위한 input 요소 생성
+    const editInput = document.createElement('input');
+    editInput.type = 'text'; // 입력 필드 타입은 텍스트
+    editInput.value = todo.title; // input의 초기값으로 기존 할 일의 제목을 설정
+    editInput.className = 'edit-input'; // CSS 스타일링을 위한 클래스 이름 부여
+
+    // '저장' 버튼 생성
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'save-btn'; // CSS 클래스 설정
+    saveBtn.textContent = '저장'; // 버튼에 표시될 텍스트
+
+    // '취소' 버튼 생성
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'cancel-btn'; // CSS 클래스 설정
+    cancelBtn.textContent = '취소'; // 버튼에 표시될 텍스트
+
+    // 기존의 할 일 텍스트(todoText)를 새로 만든 수정 입력창(editInput)으로 교체
+    li.replaceChild(editInput, todoText);
+
+    // 기존 버튼들(수정, 삭제)을 비우고, '저장'과 '취소' 버튼을 새로 추가
+    actionButtons.innerHTML = '';
+    actionButtons.append(saveBtn, cancelBtn);
+
+    // 사용자가 바로 입력할 수 있도록 수정 입력창에 포커스를 줌
+    editInput.focus();
+
+    // 수정 입력창에서 키보드 이벤트 처리
+    editInput.addEventListener('keydown', (event) => {
+        // 'Enter' 키를 누르면 저장 로직 실행
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 폼 제출과 같은 기본 동작 방지
+            saveTodo(todo.id, editInput.value); // 입력된 값으로 저장 함수 호출
+        }
+        // 'Escape' 키를 누르면 수정 취소
+        else if (event.key === 'Escape') {
+            updateListBasedOnFilter(); // 현재 필터 상태에 맞춰 목록을 다시 그림 (수정 전 상태로 복구)
+        }
+    });
+
+    // '저장' 버튼 클릭 시, 입력된 값으로 저장 함수 호출
+    saveBtn.addEventListener('click', () => saveTodo(todo.id, editInput.value));
+
+    // '취소' 버튼 클릭 시, 수정 전 상태로 목록을 다시 그림
+    cancelBtn.addEventListener('click', () => updateListBasedOnFilter());
+}

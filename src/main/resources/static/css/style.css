@@ -1,7 +1,44 @@
-/* --- 기본 레이아웃 및 폰트 설정 --- */
+/**
+ * =============================================
+ * CSS 변수 선언 (테마 및 기본값 관리)
+ * =============================================
+ */
+:root {
+    /* 색상 변수 */
+    --color-primary: #007BFF;
+    --color-primary-dark: #0056b3;
+    --color-success: #4CAF50;
+    --color-success-dark: #45a049;
+    --color-danger: #f44336;
+    --color-danger-dark: #d32f2f;
+    --color-text-dark: #333;
+    --color-text-light: #555;
+    --color-text-muted: #999;
+    --color-border: #ddd;
+    --color-bg-light: #f0f2f5;
+    --color-bg-container: #ffffff;
+    --color-bg-item: #fafafa;
+    --color-bg-item-completed: #e9f5e9;
+
+    /* 폰트 변수 */
+    --font-family-base: 'Noto Sans KR', sans-serif;
+
+    /* 레이아웃 변수 */
+    --border-radius-sm: 5px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 15px;
+    --border-radius-pill: 20px;
+    --transition-speed: 0.2s;
+}
+
+/**
+ * =============================================
+ * 기본 및 레이아웃 스타일
+ * =============================================
+ */
 body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f0f2f5;
+    font-family: var(--font-family-base);
+    background-color: var(--color-bg-light);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,51 +46,45 @@ body {
     margin: 0;
 }
 
-/* --- 전체 앱을 감싸는 컨테이너 --- */
 .container {
     width: 100%;
     max-width: 500px;
-    background-color: #ffffff;
+    background-color: var(--color-bg-container);
     padding: 30px;
-    border-radius: 15px;
+    border-radius: var(--border-radius-lg);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: var(--color-text-dark);
     margin-bottom: 25px;
 }
 
-/* --- 상단 입력 및 필터 영역 --- */
+/**
+ * =============================================
+ * 입력 및 필터 영역
+ * =============================================
+ */
 .input-container {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-#todo-input {
+/* 모든 input[type="text"] 공통 스타일 */
+input[type="text"] {
     flex-grow: 1;
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
     font-size: 16px;
 }
 
-#add-button {
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-#add-button:hover {
-    background-color: #45a049;
+/* 수정 모드 입력창 전용 스타일 */
+.edit-input {
+    padding: 8px;
+    border-color: var(--color-primary);
 }
 
 .filter-container {
@@ -63,27 +94,89 @@ h1 {
     margin-bottom: 20px;
 }
 
+/**
+ * =============================================
+ * 공통 버튼 스타일
+ * =============================================
+ */
+button {
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition-speed);
+    font-weight: bold;
+}
+
+#add-button {
+    padding: 12px 20px;
+    background-color: var(--color-success);
+    color: white;
+    border-radius: var(--border-radius-md);
+    font-size: 16px;
+}
+#add-button:hover {
+    background-color: var(--color-success-dark);
+}
+
 .filter-container button {
     padding: 8px 15px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-pill);
     background-color: #f9f9f9;
-    cursor: pointer;
-    transition: all 0.2s;
 }
-
-/* 활성화된 필터 버튼 스타일 */
-.filter-container button.active {
-    background-color: #007BFF;
-    color: white;
-    border-color: #007BFF;
-}
-
 .filter-container button:hover:not(.active) {
     background-color: #eee;
 }
+.filter-container button.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
 
-/* --- 투두 리스트 아이템 목록 --- */
+.action-buttons button {
+    background-color: transparent;
+}
+
+/* 토글, 삭제 버튼 (아이콘 형태) */
+.action-buttons .toggle-btn, .action-buttons .delete-btn {
+    font-size: 18px;
+}
+.action-buttons .toggle-btn { color: var(--color-success); }
+.action-buttons .toggle-btn:hover { color: var(--color-success-dark); }
+.action-buttons .delete-btn { color: var(--color-danger); }
+.action-buttons .delete-btn:hover { color: var(--color-danger-dark); }
+
+
+/* 수정, 저장, 취소 버튼 (텍스트 형태) */
+.action-buttons .edit-btn,
+.action-buttons .save-btn,
+.action-buttons .cancel-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-sm);
+}
+
+.action-buttons .edit-btn, .action-buttons .cancel-btn {
+    color: #777;
+    border: 1px solid var(--color-border);
+}
+.action-buttons .edit-btn:hover, .action-buttons .cancel-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.action-buttons .save-btn {
+    background-color: var(--color-primary);
+    color: white;
+}
+.action-buttons .save-btn:hover {
+    background-color: var(--color-primary-dark);
+}
+
+
+/**
+ * =============================================
+ * 투두 리스트 아이템
+ * =============================================
+ */
 #todo-list {
     list-style-type: none;
     padding: 0;
@@ -94,102 +187,33 @@ h1 {
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    background-color: #fafafa;
+    background-color: var(--color-bg-item);
     border: 1px solid #eee;
-    border-radius: 8px;
+    border-radius: var(--border-radius-md);
     margin-bottom: 10px;
-    transition: all 0.2s;
+    transition: all var(--transition-speed);
 }
 
-/* '완료' 상태의 리스트 아이템 스타일 */
 #todo-list li.completed {
-    background-color: #e9f5e9;
+    background-color: var(--color-bg-item-completed);
 }
 
 .todo-text {
     flex-grow: 1;
     cursor: pointer;
     font-size: 17px;
-    color: #555;
-    word-break: break-all; /* 긴 텍스트가 영역을 벗어나지 않도록 줄바꿈 처리 */
+    color: var(--color-text-light);
+    /* 긴 텍스트가 단어 단위로 줄바꿈 되도록 하여 가독성 향상 */
+    overflow-wrap: break-word;
+    word-break: keep-all;
 }
 
-/* '완료' 상태의 텍스트 스타일 (취소선) */
 .todo-text.completed-text {
     text-decoration: line-through;
-    color: #999;
+    color: var(--color-text-muted);
 }
 
-/* --- 아이템 우측의 액션 버튼 영역 --- */
 .action-buttons {
     display: flex;
     gap: 8px;
-}
-
-.action-buttons button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.action-buttons .delete-btn {
-    color: #f44336;
-}
-
-.action-buttons .delete-btn:hover {
-    color: #d32f2f;
-}
-
-.action-buttons .toggle-btn {
-    color: #4CAF50;
-}
-
-.action-buttons .toggle-btn:hover {
-    color: #45a049;
-}
-
-/* --- 수정 모드 전용 스타일 --- */
-.edit-input {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #007BFF;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-.action-buttons .edit-btn,
-.action-buttons .save-btn,
-.action-buttons .cancel-btn {
-    font-size: 14px;
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.action-buttons .edit-btn {
-    color: #444;
-    border: 1px solid #ddd;
-}
-
-.action-buttons .edit-btn:hover {
-    background-color: #f0f0f0;
-}
-
-.action-buttons .save-btn {
-    background-color: #007BFF;
-    color: white;
-}
-
-.action-buttons .save-btn:hover {
-    background-color: #0056b3;
-}
-
-.action-buttons .cancel-btn {
-    color: #777;
-    border: 1px solid #ddd;
-}
-
-.action-buttons .cancel-btn:hover {
-    background-color: #f0f0f0;
 }
