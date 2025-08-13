@@ -613,3 +613,32 @@ function editTodo(todo, li, todoText, actionButtons) {
     // '취소' 버튼 클릭 시, 수정 전 상태로 목록을 다시 그림
     cancelBtn.addEventListener('click', () => updateListBasedOnFilter());
 }
+
+
+
+/**
+ * 수정된 내용을 서버에 저장하는 함수
+ * @param {number} id - 수정할 투두의 ID
+ * @param {string} newTitle - 새로운 할 일 내용
+ */
+function saveTodo(id, newTitle) {
+    // 입력값 유효성 검사: 앞뒤 공백을 제거한 후 내용이 비어있는지 확인
+    if (newTitle.trim() === '') {
+        alert('할 일 내용은 비워둘 수 없습니다.'); // 비어있다면 경고창을 띄움
+        return; // 함수 실행을 중단
+    }
+
+    // fetchHelper를 사용해 서버에 PUT 요청을 보냄 (데이터 업데이트)
+    // fetchHelper는 fetch API를 감싼 유틸리티 함수로 추정됨
+    fetchHelper(`${API_URL}/${id}`, { // 요청 URL: API 기본 주소 + 특정 할 일의 ID
+        method: 'PUT', // HTTP 요청 메서드: 'PUT' (전체 리소스 교체/업데이트)
+        headers: { 'Content-Type': 'application/json' }, // 요청 헤더: 본문이 JSON 형식임을 명시
+        body: JSON.stringify({ title: newTitle }) , // 요청 본문: 자바스크립트 객체를 JSON 문자열로 변환하여 전송
+    })
+    .then(() => updateListBasedOnFilter()) // 서버 요청이 성공하면, UI를 최신 상태로 다시 그림
+    .catch(error => { // 서버 요청이 실패하면, 에러 처리 로직 실행
+        console.error('투두 업데이트 오류:', error); // 콘솔에 에러 로그 출력
+        alert(`업데이트에 실패했습니다: ${error.message}`); // 사용자에게 실패 알림창 표시
+        updateListBasedOnFilter(); // 실패했더라도 목록을 다시 그려서, 수정 모드 UI를 원래 상태로 되돌림
+    });
+}
