@@ -9,12 +9,6 @@ import java.util.List;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    // 완료 상태별로 조회
-    List<Todo> findByCompleted(Boolean completed);
-
-    // 제목으로 검색 (대소문자 구분 없음)  (여기서는 사실상 내용 으로 검색)
-    List<Todo> findByTitleContainingIgnoreCase(String title);
-
     // 완료되지 않은 항목을 생성일 순으로 정렬
     @Query("SELECT t FROM Todo t WHERE t.completed = false ORDER BY t.createdAt DESC")
     List<Todo> findIncompleteOrderByCreatedAtDesc();
