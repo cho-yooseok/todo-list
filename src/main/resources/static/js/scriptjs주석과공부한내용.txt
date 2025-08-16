@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // id가 'show-all'인 요소를 가져옵니다. '모두 보기' 필터 버튼입니다.
     const showAllBtn = document.getElementById('show-all');
 
-    // --- 2. API 통신 및 핵심 로직 함수 (async/await 스타일로 통일) ---
+    // --- 2. API 통신 및 핵심 로직 함수 (async/await 스타일) ---
 
     /**
      * 서버 API 호출을 위한 범용 헬퍼(도우미) 함수
