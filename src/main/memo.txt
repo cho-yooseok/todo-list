@@ -1,0 +1,46 @@
+todoText.textContent = todo.title;
+
+앞에서 만든 <span> 요소(todoText) 안에, todo 객체의 title 속성 값을 텍스트로 넣는 코드입니다.
+
+textContent -> HTML 요소 안에 표시될 텍스트를 의미.(innerText와 비슷하지만 HTML태그는 무시하고 텍스트 그대로 넣음)
+
+todo.title -> todo 라는 객체 안에 있는 title 이라는 속성 값
+
+예를 들어 todo 객체가 이렇게 생겼다면
+const todo = { id: 1, title: "운동하기", completed: false};
+
+실행결과는
+<span class="todo-text"> 운동하기</span>
+
+즉, 할 일 제목을 화면에 표시하는 역할
+
+
+
+
+if(todo.completed) {
+        todoText.classList.add('completed-text');
+}
+
+todo.completed -> todo 객체의 완료 여부 (Boolean 값)
+true 라면 완료된 일
+false 라면 아직 미완료
+
+classList.add('completed-text')
+-> todoText 요소에 "completed-text" 라는 css 클래스를 추가
+
+즉
+할일이 완료된 상태라면(span에 완료 스타일을 적용) 한다는 뜻입니다.
+
+
+css
+
+.completed-text {
+    text-decoration: line-through;
+    color: gray;
+}
+
+결과 : 완료된 todo는 화면에서 회색 취소선이 그어진 텍스트로 보이게 됩니다.
+
+
+
+
