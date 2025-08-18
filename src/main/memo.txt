@@ -44,3 +44,381 @@ css
 
 
 
+
+if(todo.completed) {
+todoText.classList.add('completed-text');
+}
+
+위 코드는 자바스크립트에서 특정 조건이 만족 되었을 때
+html 요소의 스타일을 변경하는 로직의 일부입니다.
+할 일 목록(To-Do List) 애플리케이션에서 흔히 사용되는 패턴입니다.
+
+if(todo.completed) {
+    todoText.classList.add('completed-text');
+}
+
+if(todo.completed)
+todo 라는 객체(Object)에 completed 라는 속성(Property)이 있는지 확인합니다.
+만약 completed 속성의 값이 true 이면 {} 안의 코드를 실행합니다.
+이는 '할 일이 완료되었는가?'를 묻는 조건문입니다.
+
+todoText.classList.add('completed-text')
+todoText는 HTML요소를 가리키는 변수입니다.(예 : 특정 할 일 항목의 텍스트 부분)
+classList는 해당 HTML요소가 가지고 있는 모든 CSS클래스(class)의 목록입니다.
+.add('completed-text')는 이 목록에 'completed-text' 라는 새로운 클래스를 추가하는 명령어입니다.
+
+결론적으로, 이 코드는 "만약 todo 객체의 completed 상태가 true(완료됨)이면, todoText라는 HTML 요소에 completed-text 라는
+CSS 클래스를 추가하라"는 의미입니다.
+이렇게 클래스를 추가하면, 미리 정의된 CSS 스타일에 따라 해당 텍스트의 모양이 바뀌게 됩니다.
+(예: 취소선이 그어지거나 글자색이 회색으로 변하는 등
+)
+
+
+
+
+
+/*
+특정 투두 항목을 '수정 모드'로 변경하는 함수
+
+동작 흐름
+1. 기존의 텍스트(todoText)를 입력창(<input>)으로 교체
+2. 액션 버튼 영역(actionButtons)에 "저장" & "취소" 버튼을 표시
+3. 입력창에 포커스를 주어 바로 수정 가능하도록 함
+4. 엔터(Enter)키 -> 저장 실행 / ESC 키 -> 수정 취소
+*/
+
+
+function editTodo(todo, li, todoText, actionButton) {
+// editTodo 라는 이름의 함수를 정의한다
+
+// todo
+// 투두 항목 하나의 데이터 객체 (예:{id: 1, title: "공부하기", completed: false})
+// 즉 수정하려는 할 일(Todo)의 정보를 담고 있음
+
+// li
+// HTML 문서에서 리스트 항목<li> 요소
+// 즉, 화면에 표시되는 "할 일 하나"에 해당하는 DOM 요소
+
+// todoText
+// 해당 li 안에 표시되고 있던 텍스트 노드나 텍스트가 들어있는 요소(span 등)
+// 이걸 나중에 입력창<input>으로 교체하기 위해 전달받음
+
+// actionButton
+// 해당 투두 항목에서 "버튼 영역"을 담당하는 DOM 요소
+// (예: [수정] [삭제] 버튼이 들어가는 컨테이너)
+// 수정 모드로 바뀔 때는 이 부분에 "저장"/"취소" 버튼이 다시 들어감
+
+// editTodo 함수는 특정 투두(todo) 객체와, 그 객체를 표현하는 HTML 요소들(li, todoText, actionButton)을 받아서,
+// 해당 투두 항목을 수정 모드로 바꿔주는 역할을 한다.
+
+
+    //***** 1. 새로운 입력창 생성 (기존 todo.title 값을 기본값으로 채워 넣음) *****
+    const editInput = document.createElement('input');
+    // const
+    // 상수(재할당 불가 변수)를 선언하는 키워드
+    // (editInput) 변수는 다른 값으로 바꿀 수 없지만, 그 안에 담긴 객체의 속성은 변경 가능
+
+    // editInput
+    // 새로 만든 HTML 요소 <input> 를 담을 변수 이름
+
+    // document.createElement('input')
+    // 자바스크립트에서 DOM API 를 이용해 새로운 HTML 태그 요소를 만드는 메서드
+    // 'input'이라는 문자열을 넣었으므로 <input> 태그가 생성됨.
+    // 이 시점에는 화면에 보이지 않고, 메모리 안에서만 존재함
+    // 나중에 append, replaceChild 같은 메서드로 DOM에 추가해야 브라우저 화면에 나타남
+
+    // editInput 이라는 변수에 새로운 <input> 입력창 요소를 만들어 담는다
+    // 브라우저 메모리 안에 <Input> 태그 하나를 만든다
+    // 아직 화면에 붙이지 않았으니, 바로 눈에 보이진않는다.
+
+
+    editInput.type = 'text';
+    // 입력타입은 텍스트
+
+    editInput.value = todo.title;
+    // 현재 투두 항목의 제목을 기본값으로 설정
+
+    editInput.className = 'edit-input';
+    // 스타일을 위한 CSS 클래스명 지정
+
+
+
+
+    // 2. "저장"버튼 생성
+    const saveBtn = document.createElement('button');
+
+    saveBtn.className = 'save-btn';
+    // 저장 버튼 CSS 클래스
+
+    saveBtn.textContent = '저장'
+    // 버튼에 보이는 텍스트
+
+
+    // 4. 기존의 텍스트(todoText)를 입력창으로 교체
+    li.replaceChild(editInput, todoText);
+
+    // 5. 액션 버튼 영역을 비우고 -> "저장" / "취소" 버튼 삽입
+    actionButtons.innerHTML = '';
+    // 기존 버튼 제거
+
+    actionButtons.append(saveBtn, cancleBtn);
+    // 새 버튼 2개 추가
+
+
+    // 6. 입력창에 포커스를 줘서 사용자 입력 준비
+    editInput.focus();
+
+    // 7. 키보드 이벤트 처리
+    const handleKeyDown = (event) => {
+    // handleKeyDown 이라는 이름의 함수를 만든다. 이 함수는 키보드 이벤트 객체 event를 받아서 실행된다.
+
+    // (event) => {...}
+    // 화살표 함수(Arrow Function) 문법
+    // event는 함수가 호출될 때 전달받는 이벤트 객체를 의미
+    // 예 : 키보드 이벤트가 발생하면, event.key  같은 속성으로 어떤 키가 눌렸는지 알 수 있음
+
+        if (event.key === 'Enter') {
+            // Enter 입력 시 -> 저장 실행
+
+           // 사용자가 누른 키가 Enter 키일 경우, 아래 코드를 실행한다.
+
+            event.preventDefault();
+            // 폼 제출 등 기본 동작 방지
+
+            saveTodo(todo.id, editInput.value);
+            // 수정된 값으로 저장 함수 호출
+
+            // saveTodo 라는 함수를 호출하면서 두 개의 인자를 전달한다
+
+            // todo.id
+            // 현재 todo(할 일) 객체의 고유 ID 값
+
+            // editInput.value
+            // 입력창(editInput)에 사용자가 입력한 텍스트값
+
+            // saveTodo(할일ID, 수정된 텍스트);
+            // 형태로 특정 할 일을 수정된 내용으로 저장하라  는 동작을 실행하는 코드
+
+        } else if (event.key === 'Escape') {
+        // 만약 사용자가 Escape(키보드의 Esc) 키를 눌렀다면 이라는 뜻
+
+        // event.key
+        // 사용자가 누른 키보드 키 값을 의미함
+
+        // 'Escape'
+        // 키보드의 ESC 키
+
+
+            // Escape 입력 시 -> 수정 취소하고 목록 다시 갱신
+            updateListBasedOnFilter();
+            // updateListBasedOnFilter(); 함수를 실행한다.
+            // 말 그대로 현재 선택된 필터 조건에 따라 할 일 목록을 갱신(업데이트) 한다 는 의미
+
+            // 즉, 현재 적용된 필터에 맞춰  화면에 보이는 리스트를 다시 그려라     라는 코드
+        }
+    };
+}
+
+
+
+
+editInput.addEventListener('keydown', handleKeyDown);
+
+editInput
+어떤 입력창 (예 : 할 일 수정입력 필드)
+
+.addEventListener('keydown', handleKeyDown)
+입력창에서 키보드가 눌렸을 때 (keydown 이벤트), handlekeyKown 함수를 실행하라는 의미
+
+즉,
+사용자가 입력창에 키를 누르면 handleKeyDown 함수가 호출된다.
+
+보통 이 안에서는
+Enter
+수정 내용 저장
+Escape
+수정 취소
+
+
+
+saveBtn.addEventListener('click', () => saveTodo(todo.id, editInput.value));
+
+saveBtn
+"저장" 버튼
+
+.addEventListener('click', ...)
+버튼을 클릭했을 때 실행할 동작을 등록
+
+() => saveTodo(todo.id, editInput.value)
+화살표 함수, 클릭되면 saveTodo 함수를 호출하면서
+todo.id (할 일의 고유 ID)
+editInput.value (입력창에 입력된 수정된 텍스트 값)
+을 전달
+
+즉,
+저장버튼을 클릭하면, 해당 할 일의 ID와 입력된 수정 내용을 saveTodo함수로 보내 저장한다
+
+
+
+cancelBtn.addEventListener('click', () => updateListBasedOnFilter());
+
+cancelBtn
+"취소" 버튼
+
+.addEventListener('click', ...)
+취소 버튼이 클릭되었을 때 실행할 동작을 등록
+
+() => updateListBasedOnFilter()
+화살표 함수, 클릭 시
+updateListBasedOnFilter() 함수를 호출
+
+즉,
+취소 버튼을 클릭하면, 현재 적용된 필터 조건에 맞춰 다시 목록을 갱신한다.
+
+주로 수정 중이던 입력창을 닫고 원래의 할 일 목록 화면으로 되돌아가는 용도로 쓰임
+
+
+/*
+현재 활성화된 필터를 기준으로 목록을 업데이트하는 함수
+*/
+function updateListBasedOnFilter() {
+
+    const activeFilterBtn = document.querySelector(.'.filter-container button.active');
+    // .filter-container 안에서 현재 'active' 클래스를 가진 버튼을 찾아옴
+
+    const filter = activeFitlerBtn.id.replace('show-','');
+    // 버튼의 id 값에서 'show-' 부분을 제거하고 필터 이름만 추출
+    // 예 : id= "show-all" -> filter="all"
+
+    fetchTodos(filter);
+    // 추출한 필터 값을 사용하여 할 일 목록을 다시 불러옴
+
+    /*
+    필터 버튼의 활성 상태를 시각적으로 변경하는 함수
+    */
+    function setActiveFilter(activeButton) {
+
+        document.querySelectorAll('.filter-container button'.).forEach(btn => btn.classList.remove());
+        // 모든 필터 버튼에서 'active' 클래스를 제거(초기화)
+
+        activeButton.classList.add('active');
+        // 클릭된 버튼에만 'active' 클래스를 추가 (선택된 버튼 강조)
+}
+
+
+
+
+const activeFilterBtn = document.querySelector('.filter-container button.active');
+
+const activeFilterBtn
+activeFilterBtn 이라는 함수를 선언 (바뀌지 않는 변수)
+
+document.querySelector(...)
+HTML문서에서 조건에 맞는 첫 번째 요소를 찾아옴
+
+'.filter-container button.active'
+CSS 선택자
+
+.filter-container
+클래스가 filter-container 인 요소
+
+button.active
+그 안에서 클래스가 active인 button 요소
+
+즉
+filter-container 안에서 active 클래스를 가진 버튼 요소를 찾아서 activeFilterBtn 에 저장한다
+
+
+.querySelector(...)
+.querySelector(...) 는 DOM API 메서드로, HTML 문서 안에서 특정 CSS 선택자와 일치하는 첫 번째 요소를 찾아 반환하는 기능입니다.
+
+document
+HTML 전체 문서를 가리킴
+
+.querySelector('선택자')
+지정한 CSS 선택자에 맞는 첫 번째 요소를 가져옴
+
+
+('.filter-container button.active')
+이 부분은 CSS 선택자입니다.
+
+선택자 해석
+.filter-container
+클래스 이름이 fitler-container 인 요소
+
+button.active
+button 태그이면서 동시에 active 클래스를 가진 요소
+
+띄어쓰기 (.filter-container  button.active)
+
+자식/후손 관계를 의미
+즉, filter-container 안에 있는 button.active
+
+('.filter-container button.active')
+filter-container 안에 있는 버튼 중, active 클래스를 가진 버튼
+
+
+
+206
+
+    /**
+     * 현재 활성화된 필터를 기준으로 목록을 업데이트하는 함수
+     */
+    function updateListBasedOnFilter() {
+        const activeFilterBtn = document.querySelector('.filter-container button.active');
+        const filter = activeFilterBtn.id.replace('show-', '');
+        fetchTodos(filter);
+    }
+
+    /**
+     * 필터 버튼의 활성 상태를 시각적으로 변경하는 함수
+     */
+    function setActiveFilter(activeButton) {
+        document.querySelectorAll('.filter-container button').forEach(btn => btn.classList.remove('active'));
+        activeButton.classList.add('active');
+    }
+
+
+
+const filter = activeFilterBtn.id.replace('show-','');
+버튼의 id에서 "show-" 접두어를 제거한 문자열을 filter 변수에 담는 코드
+즉, 현재 어떤 필터 버튼이 눌렸는지를 문자열("all", "completed", "incompleted")로 저장하는 역할을 합니다.
+
+
+
+activeFilterBtn.id
+activeFilterBtn 이라는 버튼 요소의 id 속성을 가져옵니다.
+
+.replace('show','')
+문자열에서 show-  라는 부분을 빈 문자열 ''  로 바꿉니다.
+즉, "show-" 접두어를 제거하는 동작입니다.
+
+예시
+"show-all".replace('show-','') -> "all"
+"show-completed".replace('show-', '')
+
+const filter = ...
+이렇게 처리된 결과 문자열을 filter 변수에 저장합니다.
+
+
+
+fetchTodos(filter);
+현재 선택된 필터 기준   으로 할 일 목록을 가져오는 함수를 실행하는 코드
+filter 가 "all" -> 모든 할 일 불러오기
+
+
+
+fetchTodos
+정의해둔 함수 이름
+할 일 목록(Todos)을 가져오는 역할을 합니다.
+
+
+(filter)
+앞서 만든 filter 변수를 함수의 인자로 전달합니다.
+filter 값은 "all", "completed", "incompleted" 중 하나
+이 값에 따라 어떤 Todo 목록을 불러올지 결정
+
+
+
+function setActiveFilter(activeButton) {
+}
