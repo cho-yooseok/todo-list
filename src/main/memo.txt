@@ -422,3 +422,164 @@ filter 값은 "all", "completed", "incompleted" 중 하나
 
 function setActiveFilter(activeButton) {
 }
+setActiveFilter 라는 이름의 함수를 정의하는데,
+이 함수는 클릭된 버튼(activeButton)을 기준으로 현재 활성화된 필터를 설정하는 역할을 합니다.
+
+
+
+
+function
+새로운 함수를 정의할 때 사용하는 키워드
+
+setActiveFilter
+함수 이름
+직역하면  활성화된 필터를 설정한다  라는 의미
+보통UI 에서 어떤 필터 버튼이 선택되었는지 표시하거나,
+선택된 버튼에 맞게 동작을 바꾸는 역할을 합니다.
+
+(activeButton)
+-> 이 함수가 받을 매개변수(parameter)
+activeButton 은 사용자가 클릭한 필터 버튼 요소 (예 : show-all, show-completed, show-incomplete 버튼 중 하나)를
+의미합니다.
+
+
+
+
+
+document.querySelectorAll('.filter-container button')
+    .forEach(btn => btn.classList.remove('active'));
+
+
+1. document.querySelectorAll('.filter-container button')
+
+document.querySelectotAll(...)
+html문서에서 특정 선택자(selector) 에 해당하는 모든 요소를 선택합니다.
+
+.filter-container button
+.filter-container 라는 클래스 안에 있는 모든 버튼(button)요소를 선택한다는 뜻
+
+즉,
+필터 버튼 전체를 가져오는 코드입니다.
+
+
+
+function setActiveFilter(activeButton) {
+}
+setActiveFilter 라는 이름의 함수를 정의하는 구문
+setActiveFilter 함수이름(필터 버튼을 활성화시키는 역할을 의미)
+activeButton
+함수에 전달되는 매개변수(parameter), 즉 "현재 활성화시킬 버튼 요소"를 의미
+-> 즉, 전달받은 버튼을 활성화 상태로 설정하는 함수의 시작 부분 이라는 뜻
+
+
+document.querySelectorAll('.filter-container button').forEach(btn => btn.classList.remove('active'));
+
+의미는
+".filter-container 안에 있는 모든 버튼 요소를 찾아서, 각각의 버튼에서 'active'라는 클래스를 제거한다"  입니다.
+
+
+document.querySelectorAll('.filter-container button')
+-> HTML 문서에서 .filter-container 라는 클래스를 가진 요소 안의 모든 <button> 태그를 선택
+
+.forEach(...)
+선택된 버튼들을 하나씩 순회
+
+btn.classList.remove('active')
+각 버튼의 class 목록에서 'active' 클래스를 제거
+
+btn.classList.remove('active')
+버튼(btn) 요소의 클래스 목록에서 'active' 라는 클래스를 제거한다.
+btn
+-> 반복문(forEach)에서 순회 중인 버튼 요소
+.classList
+해당 요소의 class 속성을 제어할 수 있는 객체
+.remove('active')
+클래스 목록에서 'active'를 삭제
+버튼이 활성화 표시(선택 상태) 되어 있었다면 그 표시를 없애는 것입니다.
+모든 버튼의 활성화 상태를 초기화한 뒤 -> 선택된 버튼만 다시 add('active')로 활성화하기 위해서입니다.
+
+즉, 기존에 활성화돼 있던 버튼의 'active'상태를 모두 초기화하는 과정입니다.
+
+
+activeButton.classList.add('active');
+activeButton으로 전달된 버튼에 'active' 클래스를 추가한다 입니다
+
+activeButton
+함수 매개변수로 받은 "클릭된(또는 활성화하려는) 버튼" 요소
+
+.classList.add('active')
+해당 버튼의 class 속성에 'active'라는 이름의 CSS 클래스를 추가
+
+즉,
+방금 전의 모든 버튼에서 'active' 클래스를 제거했다가,
+선택된 버튼에만 'active'클래스를 붙여서 활성화 표시를 해주는 것
+
+
+
+addButton.addEventListener('click',handleAddTodo);
+addButton(추가 버튼) 을 클릭했을 때 handleAddTodo 함수를 실행하도록 이벤트를 등록한다.
+
+addButton
+HTML에서 id="add-button" 같은 식으로 선택된  추가 버튼 요소
+
+.addEventListener('click', ...)
+이 버튼에 클릭 이벤트 리스너를 붙임
+
+handleAddTodo
+클릭 시 실행할 함수(할 일을 추가하는 기능 담당)
+
+즉, 버튼을 누르면 할 일이 리스트에 추가되는 로직(handleAddTodo 함수)이 실행됨
+
+
+todoInput.addEventListener('keypress', (event) => {     )
+todoInput(할 일 입력창)에서 키보드가 눌릴 때마다 event 를 전달받아 실행되는 함수를 등록한다
+
+todoInput -> <input> 입력창 요소 ( 예: id="todo-input" )
+.addEventListener('keypress', )
+입력창에서 키가 눌렸을 때 발생하는 이벤트(keypress)를 감지
+
+(event) => {...}
+화살표 함수, 눌린 키에 대한 정보를 event 객체로 받아옴
+
+즉, 사용자가 입력창에서 키보드를 누를 때 실행되는 동작을 정의하는 부분
+
+보통 이 안에서 Enter 키를 눌렀는지 확인하고, Enter 라면 새로운 할 일을 추가하는 코드가 들어간다
+
+
+if(event.key === 'Enter') handleAddTodo();
+
+사용자가 누른 키 (event.key) 가 "Enter"라면 handleAddTodo() 함수를 실행한다
+
+event.key
+지금 눌린 키의 이름 (예 : "a","1","Enter")
+
+=== 'Enter'
+눌린 키가 Enter 인지 확인하는 조건문
+
+handleAddTodo();
+조건이 참일 때 실행, 즉 할 일을 추가하는 함수 실행
+
+->
+즉, 입력창에서 Enter를 누르면 버튼 클릭 없이도 새 할 일이 추가되도록 동작하는 것입니디ㅏ.
+
+요약:
+버튼을 누르거나 Enter를 치면 같은 기능 (handleAddTodo)이 실행되도록 만든 것입니다.
+
+
+
+btn.classList.remove('active')
+버튼(btn) 요소의 클래스 목록에서 'active'라는 클래스를 제거한다
+btn
+반복문(forEach)에서 순회 중인 버튼 요소
+.classList
+해당 요소의 class 속성을 제어할 수 있는 객체
+.remove('active')
+클래스 목록에서 'active'를 삭제
+
+즉
+버튼이 활성화 표시(선택 상태) 되어 있었다면 그 표시를 없애는 것
+
+이게 실행되는 이유는,
+모든 버튼의 활성화 상태를 초기화한 뒤
+선택된 버튼만 다시
+add('active')로 활성화하기 위해서
