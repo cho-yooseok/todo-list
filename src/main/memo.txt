@@ -583,3 +583,397 @@ btn
 모든 버튼의 활성화 상태를 초기화한 뒤
 선택된 버튼만 다시
 add('active')로 활성화하기 위해서
+
+
+
+
+
+filterContainer.addEventListener('click',(event) => {
+)
+
+filterContainer 요소에 클릭 이벤트 리스너를 등록한다는 뜻
+즉, 사용자가 filterContainer (예 : 버튼들이 들어있는 컨테이너 같은 DOM 요소)를 클릭했을 때,
+뒤에 오는 함수 ( (event) => {...} ) 가 실행하도록 설정한 것
+
+(event) 는 클릭 이벤트가 발생했을 때의 이벤트 객체를 의미
+
+{...} 안에는 클릭시 실행할 코드들이 들어감
+
+쉽게 말하면
+filterContainer 를 클릭하면 이 안의 코드를 실행하라
+
+
+const clickedButoon = event.target.closest('button');
+
+event.target
+사용자가 실제로 클릭한 DOM 요소를 뜻합니다.
+
+.closest('butoon')
+클릭된 요소에서 가장 가까운 button 태그를 찾아 반환합니다.
+만약 클릭한 곳이 버튼 안의 <span> 같은 자식 요소라면, 그 부모인 <button>을 찾아줍니다.
+버튼이 아니면 null을 반환합니다.
+즉,
+사용자가 클릭한 위치에서 가장 가까운 <button> 요소를 찾아 clickedButton 변수에 저장한다.
+
+
+
+if(!clickedButton) return;
+클릭한 요소가 버튼이 아니면 함수를 실행하지 말고 바로 종료해라
+
+!clickedButton
+clickedButton 이 없다 (null 또는 undefined다) 는 뜻
+
+즉, 사용자가 클릭한 곳이 버튼이 아니라면 true가 됩니다.
+
+return;
+그냥 함수 실행을 멈추고 빠져나간다는 의미
+
+클릭한 요소가 버튼이 아니면 함수를 실행하지 말고 바로 종료해라
+
+즉, 버튼 외의 영역(예: 빈 공간, 텍스트 등)을 클릭했을 때는 이벤트가 무시되도록 하는 안전 장치
+
+
+
+const filter = clickedButton.id.replace('show','');
+
+clickedButton.id
+사용자가 클릭한 버튼의 id 값을 가져옵니다.
+
+.replace('show','')
+id값에서 show- 라는 글자를 찾아서 빈 문자열 ""  로 바꿔 제거합니다.
+결과를 filter 변수에 저장합니다.
+
+예시
+버튼의 id가 "show-completed" 라면 -> completed
+버튼의 id가 "show-active"라면 -> "active"
+버튼의 id가 "show-all"라면 -> "all"
+
+즉,
+클릭한 버튼의 id에서 show- 라는 접두사를 빼고, 나머지 부분만 filter 변수에 저장한다
+
+
+filter는 어떤 할 일 목록을 보여줄지 (예: 전체, 완료됨, 진행중)를 구분하는 역할을 하게 됩니다.
+
+
+setActiveFilter(clickedButton);
+setActiveFilter 라는 함수를 호출하면서 사용자가 클릭한 버튼 clickedButton 을 인자로 전달합니다.
+
+
+
+
+총 해석
+->
+1. filterContainer 클릭 감지
+2. 클릭된 요소에서 가장 가까운 <button> 찾기
+3. 버튼이 아니면 종료
+4. 버튼의 id에서 show- 제거       ->    filter 값 추출
+5. 그 버튼을 활성 버튼으로 표시
+
+
+
+fetchTodos(filter);
+fetchTodos라는 함수를 호출하면서, 앞에서 구한 filter 값을 인자로 넘깁니다.
+이 함수는 보통 서버나 로컬데이터에서 할 일 목록(Todos)을 불러오되, 필터 조건에 맞게 가져오는 역할을 합니다.
+
+filter가 "all" -> 전체 할 일 불러오기
+filter가 "completed" -> 완료된 할 일만 불러오기
+filter가 "active" -> 진행 중인 할 일만 불러오기
+
+"선택된 필터 조건에 맞는 할 일 목록을 불러와서 화면에 표시해라"
+
+정리
+1.filterContainer 클릭 감지
+2.클릭된 버튼 찾기 (clickedButton)
+3.버튼 아니면 종료
+4. 버튼id에서 "show-" 제거 -> filter 값 추출
+5. 클릭된 버튼을 활성화 표시
+6. filter 조건으로 할 일 목록 다시 불러오기
+
+
+
+주석
+// 필터 버튼 클릭 이벤트 등록 (이벤트 위임 방식 사용)
+// filterContainer 안에서 발생하는 클릭 이벤트를 한 번만 감지하고,
+// 실제 클릭된 버튼에 따라 동작을 다르게 처리합니다.
+filterContainer.addEventListener('click', (event) => {
+
+    // 사용자가 클릭한 요소에서 가장 가까운 <button> 요소를 찾음
+    // (버튼 안의 <span> 같은 요소를 눌러도 해당 버튼이 인식되도록 함)
+    const clickedButton = event.target.closest('button');
+
+    // 클릭된 요소가 버튼이 아니면 함수 실행 중단
+    // (즉, 버튼 영역 외 클릭은 무시)
+    if(!clickedButton) return;
+
+    // 버튼의 id 에서 "show-" 라는 접두사를 제거해 필터 이름만 추출
+    // 예 : "show-completed" -> "completed"
+    const filter = clickedButton.id.replace('show-', '');
+
+    // 클릭된 버튼을 활성화 상태로 표시 (예 : CSS class "active" 추가)
+    // 동시에 다른 버튼들에서는 활성화 표시 제거
+    setActiveFilter(clickedButton);
+
+    // 선택된 필터 조건에 맞는 할 일 목록 불러오기
+    // 예 : "all" -> 전체, "completed" -> 완료된 항목
+    fetchTodos(fitler);
+});
+
+해설(흐름 요약)
+1. filterContainer(버튼들을 감싼 부모 요소)에 클릭 이벤트를 걸어둔다 (이벤트 위임 -> 버튼 개수만큼 리스너를 안 달아도 됨)
+2. 실제 클릭된 요소가 버튼인지 확인한다 (버튼이 아니라면 무시)
+3. 버튼id에서 "show-" 를 제거해 어떤 필터인지 (all, completed) 알아낸다
+4. 클릭된 버튼을 시각적으로 활성화 표시한다
+5. 해당 필터 조건에 맞춰 할 일 목록을 다시 가져온다.
+
+
+
+
+const clickedButton = event.target.closest('button');
+
+event
+누가 어디를 클릭했는지 정보가 들어있는 상자
+
+event.target
+사용자가 정확히 클릭한 그 요소. (버튼 안의 글자 <span>이나 아이콘 <i> 일 수도 있다.)
+
+.closest('button')
+지금 요소에서 위로 위로(부모 방향)올라가며 가장 가까운 <button>을 찾아 준다.
+자기 자신이 이미 <button> 이면 그걸 바로 돌려줍니다.
+끝까지 올라가도 버튼이 없으면 null
+
+사용자가 클릭한 곳에서 시작해, 위쪽으로 올라가며 제일 가까운 버튼 요소를 찾아 clickedButton 에 담는다
+
+
+과정
+1. 사용자가 클릭함 -> 브라우저가 event를 만든다
+2. event.targe은 실제로 맞은 요소
+예 : <span> 아이콘 </span>  같은 버튼의 자식
+3. closest('button') 가 다음과 같이 움직인다
+ 지금 요소가 <button> 인가? -> 맞으면 그 버튼 반환
+ 아니면 부모로 한 칸 올라감 -> 또 <button> 인가? -> 맞으면 반환
+ 최상단까지 가도 못 찾으면 null 반환
+
+ 왜 이렇게 쓰나? (이벤트 위임에 딱!)
+ 버튼 안에는 보통 글자, 아이콘, <span>, <svg> 같은 자식 요소들이 있다.
+ 사람은 버튼을 눌렀지만, 실제로는 그 자식 요소를 클릭한 것으로 잡히는 경우가 많다
+ closest('button')을 쓰면 무조건 버튼 본체를 안전하게 찾아낼 수 있습니다.
+
+
+작은 예시
+<div class = "filter-container">
+    <button id ="show-all"><span>전체</span></button>
+    <button id ="show-active"><i>진행중</i></button>
+    <button id ="show-completed">완료</button>
+</div>
+
+전체 글자 <span>를 클릭 -> event.target 은 <span>
+-> .closest('button')는 그 부모 버튼 (#show-all)을 찾아서 반환
+
+진행중 아이콘 <i> 클릭 -> 부모 버튼 #show-active반환
+버튼이 아닌 빈 공간 클릭 -> 위로 올라가도 <button>없음 -> null
+-> 그래서 보통 바로 다음 줄에 if(!clickedButton) return; 같은 안전 체크를 합니다.
+
+
+
+.target
+누구를 정확히 클릭했는지 알려주는 속성
+event.target = 사용자가 클릭한 진짜 요소
+
+버튼 안에 글자 <span> 나 아이콘 <i>이 있으면, 그걸 클릭한 걸로 잡음
+
+html
+<button>
+    <span>클릭</span>
+</button>
+
+<span> 글자를 클릭하면 -> event.target 은 <span>
+버튼 테두리 직접 클릭하면 -> event.target 은 <button>
+
+즉,
+target은 "마우스가 실제로 맞은 그 지점 요소"
+
+
+.closest('선택자')
+가까운 부모 중에 이 조건(선택자)에 맞는 걸 찾아줘
+지금 요소 자신부터 검사 -> 없으면 위로 올라가며(부모 방향) 검사
+제일 가까운 조건 맞는 요소 반환
+끝까지 없으면 null
+
+
+html
+<div class="box">
+    <button id ="btn">
+        <span>글자</span>
+    </button>
+</div>
+
+js
+const span = document.querySelector('span');
+span.closest('button'); // <button id ="btn">...</button>
+span.closest('.box');   // <div class="box">...</div>
+span.closest('div');    // <div class="box">...</div>
+span.closest('ul');     // null (못 찾음)
+
+즉,
+.closest() 는  "나부터 시작해 위쪽으로 올라가면서 제일 가까운 특정 태그/클래스를 찾아라"
+
+두 개를 합치면
+
+event.target
+실제 클릭된 요소
+
+event.target.closest('button')
+클릭된 요소에서 시작해 버튼 본체를 찾는 것
+
+
+
+
+todoList.addEventListener('click',(event) => {
+)
+
+todoList 라는 DOM 요소 (예 : <ul> 같은 리스트)에 클릭 이벤트 리스너를 등록하는 코드입니다.
+
+사용자가 todoList 영역안의 어떤 부분을 클릭하면, 뒤에 정의된 화살표 함수 (event) => {...} 가 실행됩니다.
+
+(event) 는 이벤트 객체를 받아와서, 클릭된 대상(event.target) 등과 같은 정보를 사용할 수 있게 해줍니다.
+
+즉, todoList 영역을 클릭했을 때 실행할 동작을 지정하는 코드입니다.
+
+
+
+js
+const li = event.target.closest('li');
+
+event.target
+사용자가 실제로 클릭한 HTML 요소 (예: <span>, <button> 같은 것)
+
+.closest('li')
+클릭된 요소에서 가장 가까운 조상요소(ancestor) 중에서 <li>태그를 찾아 반환.
+
+만약 클릭한 게 <span> 이라도, 그 <span>이 <li> 안에 있으면 해당<li>요소를 찾아줌
+<li>를 찾을 수 없으면 null 반환
+
+즉,
+클릭한 요소가 속한 가장 가까운 <li>요소를 찾아서 li변수에 담는다
+
+보통 투두리스트에서 어떤항목(li)이 클릭되었는지 찾기 위해 쓰입니다.
+
+
+js
+if (!li) return;
+
+!li -> li 가 null 또는 undefined인 경우 (즉, <li> 요소를 못 찾았을 경우)
+
+return
+그 즉시 함수를 종료시켜 더 이상 실행하지 않음
+
+즉,
+"만약 클릭된 요소가 <li> 안에 속해 있지 않다면, 함수 실행을 멈추고 아무 것도 하지 않는다"
+
+이렇게 해주면 todoList 안의 빈 영역이나 <li> 밖을 클릭했을 때 불필요한 오류나 동작이 실행되지 않게 막는 역할을 합니다.
+
+
+
+
+const id = Number(li.dataset.id);
+li.dataset.id   ->  <li> 요소에 있는 data-id 속성 값을 가져옴
+예 : <li data-id="3"> 라면 li.dataset.id 는 "3" 문자열
+
+Number(...)
+문자열 "3" 을 숫자 3으로 변환
+
+즉,
+클릭된 <li> 요소의 data-id 값을 숫자로 변환해 id 변수에 저장한다.
+
+보통 투두 리스트 같은 곳에서 각 항목에 고유한 id를 붙여두고,
+그걸 이용해 어떤 항목을 수정하거나 삭제할지 식별할 때 사용합니다.
+
+
+const id = Number(li.dataset.id);
+
+li.dataset.id
+<li> 요소에 있는 data-id 속성 값을 가져옴
+
+예 : <li data-id="3"> 라면 li.dataset.id 는 "3" (문자열)
+
+Number(...)
+문자열 "3"을 숫자 3으로 변환
+
+즉,
+클릭된 <li> 요소의 data-id 값을 숫자로 변환해 id 변수에 저장한다
+
+보통 투두 리스트 같은 곳에서 각 항목에 고유한 id를 붙여두고, 그걸 이용해 어떤 항목을 수정하거나 삭제할지 식별할 때 사용합니다.
+
+const targetClass = event.target.class.Name;
+
+event.target
+사용자가 실제 클릭한 요소 (예: 버튼, 텍스트, 체크박스)
+
+.className
+그 요소에 지정된 CSS클래스 이름 전체 문자열을 가져옴
+
+예를 들어
+<button class="delete-btn">삭제</button>
+
+이 버튼을 클릭했다면
+event.target.className 의 값은 "delete-btn"이 됩니다.
+
+즉,
+"클릭된 요소의 클래스 이름을 문자열로 가져와 targetClass 변수에 저장한다
+
+이 값은 보통
+if(targetClass === 'delete=btn') {...} 처럼 조건문에서 삭제 버튼인지, 수정버튼인지 등을 구분할 때 쓰입니다.
+
+
+
+if(targetClass === 'toggel-btn') {
+}
+
+targetClass
+방금 가져온 클릭된 요소의 클래스 이름
+
+=== 'toggle-btn'
+그 클래스 이름이 "toggle-btn" 과 정확히 일치하는지 비교
+
+즉
+클릭된 요소가 toggle-btn 클래스라면, 아래에 정의된 동작을 실행한다.
+
+보통 이 부분은 할 일 완료/미완료 상태를 전환하는 버튼을 눌렀을 때 실행되는 조건문
+
+
+toggleTodo
+미리 정의된 함수 이름 (할 일을 토글 (완료 <-> 미완료 전환)하는 기능 담당
+(id) -> 클릭된 <li> 요소의 고유한 id 값을 인자로 전달
+즉,
+"해당 id를 가진 투두 항목의 상태(완료/미완료)를 바꾸는 함수를 실행한다"
+
+예를 들어,
+id = 3 이라면
+toggleTodo(3) 호출
+-> id가 3인 할 일의 상태를 반대로 변경
+
+
+
+} else if (targetClass === 'delete-btn') {
+
+해석
+else of ->
+앞의 조건 (toggle-btn) 이 거짓일 때, 새로운 조건을 검사
+
+targetClass === 'delete-btn'
+-> 클릭된 요소의 클래스 이름이
+"delete-btn"인지 확인
+
+즉,
+클릭된 요소가 delete-btn 클래스라면, 아래에 정의된 동작을 실행한다
+
+보통 이 구문은
+toggle-btn
+완료 상태 토글
+
+delete-btn
+할 일 삭제
+
+처럼 버튼의 용도에 따라 다른 기능을 실행하도록 구분하는 역할을 합니다.
+
+
