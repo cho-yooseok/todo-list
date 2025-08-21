@@ -977,3 +977,167 @@ delete-btn
 처럼 버튼의 용도에 따라 다른 기능을 실행하도록 구분하는 역할을 합니다.
 
 
+
+
+DOM 요소란?
+DOM = Document Object Model
+쉽게 말하면 웹 페이지의 구조를 자바스크립트가 이해하고 조작할 수 있게 만든 객체 모델
+
+DOM 요소 = HTML 문서 안의 각 개별 요소를 의미
+예 : <ul>, <li>, <button>, <div> 같은 태그 하나하나가 DOM 요소가 됩니다.
+
+예를 들어
+HTML 이 이렇게 있을 때
+
+<ul id ="todoList">
+    <li>할 일 1</li>
+    <li>할 일 2</li>
+</ul>
+
+document.getElementById('todoList')
+<ul> 전체를 가리킴
+이것이 DOM 요소
+
+document.querySelector('li')
+첫 번째 <li>를 가리킴
+이것도 DOM 요소
+
+정리하자면
+"DOM 요소" 란 자바스크립트로 접근하고 조작할 수 있는 HTML 페이지 안의 개별 태그를 의미합니다.
+
+
+
+li.dataset.id
+
+dataset 이란?
+HTML요소의 data- 속성을 자바스크립트에서 다룰 수 있도록 제공하는 객체
+
+예를 들어 HTML에 이렇게 작성하면
+<li data-id="3"> 할 일1</li>
+
+이 <li> 요소를 자바스크립트에서 가져오면
+const li = document.querySelector('li');
+console.log(li.dataset.id); // "3"
+
+즉,
+dataset을 통해  data- 로 시작하는 모든 사용자 정의 속성에 접근할 수 있습니다.
+
+
+li.dataset.id 의 의미
+
+<li> 요소에 있는 data-id 값을 가져옴
+
+위 예제라면 "3" (문자열) 반환
+
+필요하면 Number(li.dataset.id) 처럼 숫자로 변환해 사용 가능
+
+정리
+li.dataset.id = 클릭한 <li> 요소에 저장된 data-id 값을 가져오는 코드
+
+
+
+
+todoList.addEventListener('click', (event) => {
+)
+
+todoList
+"할 일 목록" 을 담고 있는 HTML 요소
+
+.addEventListener('click', ... )
+todoList 안에서 클릭(click)이벤트가 발생했을 때 실행할 코드를 등록하는 기능
+
+(event) => {...}
+이벤트가 발생했을 때 실행될 "콜백 함수"
+event는 클릭에 대한 모든 정보(어떤 버튼을 눌렀는지, 좌표는 어디인지 등)를 담고 있는 객체
+
+->
+할 일 목록(todoList)안에서 클릭이 발생하면,
+그 클릭 정보를 event 라는 이름으로 받아와서 {...} 안의 코드를 실행하라
+
+
+const li = event.target.closest('li');
+
+event.target
+실제로 사용자가 클릭한 HTML 요소를 가리킵니다.
+
+<button class="delete-btn">삭제</button> 버튼을 클릭했다면, event.target 은 바로 그 <button>이 됩니다
+
+
+.closest('li')
+클릭된 요소에서 시작해서, 가장 가까운 조상(부모 쪽)요소 중에서 'li' 태그를 찾아 반환합니다.
+
+만약 버튼이 <li> 안에 들어 있다면, 해당<li>를 찾아서 가져옵니다.
+만약 위쪽에 <li>가 전혀 없다면 null 을 반환합니다.
+
+const li = ...
+찾은 <li> 요소를 li 라는 변수에 저장합니다.
+
+->
+쉽게 말하면
+사용자가 클릭한 버튼이 어떤 할 일 항목 <li> 안에 있는지 찾아서,
+그 <li>를 변수 li 에 담아라
+
+
+예시
+<ul id="todoList">
+    <li data-id="1">
+        <span>공부하기</span>
+        <button class="delete-btn">삭제</button>
+    </li>
+</ul>
+
+여기서 "삭제" 버튼 클릭->
+event.target = <button class="delete-btn">
+event.target.closest('li') = <li data-id="1">...</li>
+
+
+
+.closest('li') 는 "클릭한 요소에서 시작해서, 부모 쪽으로 올라가면서 가장 가까운 <li> 태그를 찾아라"
+라는 뜻
+
+아주 쉬운 비유
+어떤 버튼(자식 요소)을 눌렀다고 하자
+버튼은 <li> 태그(부모)안에 들어있다.
+.closest('li')는 이렇게 말한다
+"내가 속한 집(li)을 찾아줘. 제일 가까운 집(li)부터 확인할게 "
+
+
+<ul>
+    <li data-id="1">
+        <span> 할 일 1 </span>
+        <button class="delete-btn"> 삭제 </button>
+    </li>
+    <li data-id="2">
+        <span> 할 일 2 </span>
+        <button class="delete-btn"> 삭제 </button>
+    </li>
+</ul>
+
+
+<script>
+    document.addEventListener('click',(event) => {
+        // 클릭된 요소(event.target) 에서 가장 가까운 <li> 찾기
+        const li = event.target.closest('li');
+        console.log("찾은 li:", li);
+    });
+</script>
+
+실행 흐름
+1. 내가 삭제 버튼(button)을 클릭하면 -> event.target 은 그 버튼이다
+2. .closest('li') 를 하면 -> 그 버튼을 감싸고 있는 <li> 태그를 찾아준다.
+
+html
+
+<li data-id="2">
+    <span>할 일 2 </span>
+    <button class="delete-btn">삭제</button>
+</li>
+
+만약 클릭한 요소가 <li> 안에 없는 다른 태그라면 ->
+.closest('li') 는 null 을 반환한다
+
+한줄 요악
+.closest('li') = "클릭된 요소가 속한 가장 가까운 <li> 상자 찾아줘"
+
+
+
