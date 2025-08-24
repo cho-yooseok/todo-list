@@ -1461,3 +1461,254 @@ initialize(); 실행
 
 
 
+
+
+
+CSS 코드에 대한 해설
+CSS 변수를 활용하여 재사용성과 유지보수성을 높인 투두 리스트 애플리케이션의 스타일.
+
+1. CSS 변수 선언  ( :root )
+전역적으로 사용할 색상, 폰트, 레이아웃 관련 값을 정의합니다.
+
+2. 기본 및 레이아웃 스타일 (body, .container )
+페이지 전체의 기본 스타일과 컨테이너의 중앙 정렬 및 디자인을 설정합니다.
+
+3. 입력 및 필터 영역
+투두를 추가하고 필터링하는 부분의 스타일을 담당합니다.
+
+4. 공통 버튼 스타일
+모든 버튼에 적용되는 기본 스타일과 각 버튼의 고유한 스타일을 정의합니다.
+
+5. 투두 리스트 아이템
+개별 투두 아이템의 디자인과 완료 상태에 따른 시각적 변화를 처리합니다.
+
+
+
+/**
+CSS 변수 선언 (테마 및 기본값 관리)
+
+모든 스타일의 기본이 되는 변수들을 선언합니다.
+이 변수들을 사용하면 스타일을 일괄적으로 변경하기 용이하며,
+코드의 가독성과 유지보수성이 크게 향상됩니다.
+**/
+:root {
+
+}
+
+:root
+CSS의 :root는 HTML 문서의 최상위 요소(루트 요소)를 의미
+
+구체적으로 설명하면
+웹 문서의 루트 요소는 <html> 태그이다.
+
+따라서
+:root 는 사실상 html 과 같지만, CSS 변수(커스텀 프로퍼티)를 선언할 때는 보통 :root를 사용합니다.
+
+이렇게 하면 페이지 전체 어디서든 그 변수를 불러다 쓸 수 있습니다.
+
+예시
+css
+
+:root {
+    --main-color: blue;     /* CSS 변수 정의 */
+    --font-size: 16px;
+}
+
+body {
+    color: var(--main-color);       /* 변수 사용*/
+    font-size: var(--font-size);
+}
+
+위 코드에서
+:root 안에 --main-color 와 --font-size를 정의했다.
+이후 body 같은 다른 CSS 선택자에서 var(--변수명)으로 불러다 쓰는 것이다.
+
+정리
+:root = HTML 전체에 적용되는 최상위 선택자
+특히 CSS 변수를 전역(Global)으로 선언할 때 가장 많이 사용
+
+
+
+body {
+}
+
+CSS에서 body {...} 라고 쓰면 HTML 문서의 <body> 태그를 선택한다는 뜻
+
+정리
+body: HTML 문서에서 눈에 보이는 실제 내용(content)을 담는 가장 큰 영역
+
+html
+
+<html>
+    <head> ... </head>
+    <body>
+        <h1>제목</h1>
+        <p>내용</p>
+    </body>
+</html>
+
+여기서 body 선택자는 <body> 태그에 CSS스타일을 적용한다는 의미
+
+즉, body {...} 는
+웹페이지 전체의 기본 스타일을 지정하겠다   라는 뜻
+
+
+
+
+.container {...}
+CSS에서 class="container" 라고 지정된 HTML 요소에 스타일을 적용한다는 뜻
+
+
+예시
+
+html
+
+<div class="container">
+    <h1>할 일 목록</h1>
+    <p>이곳이 메인 박스입니다.</p>
+</div>
+
+위 HTML에서 <div class="container">...</div> 부분이 있으면,
+CSS의 .container {...} 규칙이 이 <div>에 적용됩니다.
+
+
+정리하면
+contaier = 클래스 이름
+.container = 그 클래스를 가진 요소 선택자
+즉, "메인 콘텐츠 박스를 꾸미겠다" 라는 의미
+
+
+
+CSS에서 h1{...} 라고 쓰면
+
+HTML 문서 안의 <h1> 태그(가장 큰 제목 요소)에 스타일을 적용하겠다는 뜻
+
+<h1> 투두 리스트 </h1>
+<p> 오늘 할 일을 정리해 보세요! </p>
+
+css
+
+h1 {
+    text-align: center; /* 가운데 정렬 */
+    color: red;         /* 빨간색 글씨 */
+    font-size: 30px;    /* 글씨 크기 30px */
+}
+
+
+정리하면
+h1 = HTML의 제목 태그(Heading 1, 가장 큰 제목)
+h1 {...} = 그 제목 태그 전체에 적용할 CSS 스타일을 지정
+
+
+
+CSS에서 .input-container {...} 라고 쓰면
+
+class="input-container" 라고 붙어있는 HTML 요소에 스타일을 적용한다는 뜻
+
+
+
+html
+
+<div class="input-container">
+    <input type="text" placeholder="할 일을 입력하세요">
+    <button>추가</button>
+</div>
+
+css
+
+.input-container {
+    display : flex;         /* 내부 요소(input, button)를 가로로 배치 */
+    gap: 10px;              /* input과 버튼 사이 간격 */
+    margin-bottom: 20px;    /* 아래쪽 여백 */
+}
+
+입력창과 버튼이 같은 줄에 나란히 배치됨
+
+정리하면
+
+.input-container = 클래스 선택자
+주로 입력창과 버튼을 담는 박스를 꾸밀  때 사용
+
+input[type="text"] {...} CSS 속성 선택자
+
+즉, HTML 에서 <input> 태그 중 type="text" 속성을 가진 것만 골라서 스타일을 적용한다는 뜻
+
+html
+
+<input type="text" placeholder="이름을 입력하세요">
+<input type="password" placeholder = "비밀번호 입력">
+<input type="checkbox"> 동의합니다
+
+css
+
+input[type="text"] {
+    width: 200px;    /* 가로 길이 200px */
+    padding: 8px;    /* 안쪽 여백 */
+    border: 2px solid blue; /* 파란색 테두리 */
+    border-radius: 5px;     /* 모서리 둥글게 */
+}
+
+정리하면
+input[type="text"] = <input> 중에서 텍스트 입력칸만 선택
+특정 타입의 입력창만 꾸밀때 자주 쓰는 방법
+
+
+
+.edit-input {...} 클래스는 선택자이다
+즉, HTML 에서 class="edit-input" 이라고 붙어 있는 요소에만 스타일을 적용한다는 뜻
+
+<li>
+    <span> 할 일 내용 </span>
+    <input type="text" class="edit-input value="수정 중인 내용">
+</li>
+
+
+
+css
+.edit-input {
+    width:100%;     /* 가로 전체 차지*/
+    padding: 8px;   /* 안쪽 여백*/
+    border: 1px solid gray;     /** 모서리 둥글게 */
+    font-sized: 16xpx;          /* 글자 크기 */
+
+}
+
+결과 느낌
+보통 수정모드에서만 나타나는 입력창을 꾸밀 때 사용
+평소에는 <span>으로 할 일을 보여주다가 수정 버튼을 누르면 <input class="edit-input">이 나타남
+
+.edit-input = 수정 전용 입력칸을 위한 CSS 클래스
+깔끔하게 보이도록 크기, 여백, 테두리 등을 따로 지정
+
+
+
+.filter-container {
+}
+
+.filter-container 는 CSS 클래스 선택자입니다.
+
+즉, HTML에서 class ="filter-container"를 가진 요소에 이 안의 CSS 스타일을 적용하겠다는 뜻
+
+예시
+
+html
+
+<div class="filter-container>
+    <button>전체</button>
+    <button>완료</button>
+    <button>미완료</button>
+</div>
+
+위와 같이 <div>가 filter-container 라는 클래스를 가지고 있으면,
+CSS의 .filter-container {...} 안에 정의된 스타일이적용됨
+
+
+button {...}
+
+button은 HTML <button> 태그 전체를 선택하는 CSS 선택자
+
+즉, 페이지 안에 있는 모든 버튼 요소에 해당 스타일을 적용하겠다는 뜻
+
+
+
+
