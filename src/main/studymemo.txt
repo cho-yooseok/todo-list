@@ -1709,6 +1709,745 @@ button은 HTML <button> 태그 전체를 선택하는 CSS 선택자
 
 즉, 페이지 안에 있는 모든 버튼 요소에 해당 스타일을 적용하겠다는 뜻
 
+button {
+    padding: 8px 16px;      /* 버튼 안쪽 여백 */
+    border: none;           /* 테두리 제거 */
+    border-radius: 6px;     /* 모서리를 둥글게 */
+    background-color: #007BFF;  /* 파란색 배경 */
+    color: white;               /* 글자색 흰색 */
+    cursor: pointer;            /* 마우스 올리면 손가락 모양 */
+}
 
 
 
+html
+
+<button>전체</button>
+<button>완료</button>
+<button>미완료</button>
+
+결과
+모든 버튼이 파란색 바탕, 흰 글씨, 둥근 모서리로 바뀜
+버튼 위에 마우스를 올리면 솔가락 커서가 나타남
+
+즉,
+button{...}
+프로젝트 안의 모든 버튼을 공통스타일로 꾸미는 부분입니다.
+
+
+
+
+#add-button {...}
+
+#add-button 은 CSS ID 선택자입니다.
+
+즉, HTML 에서 id="add-button" 속성을 가진 단 하나의 요소에만 스타일을 적용하겠다라는 뜻
+
+
+예시
+html
+<button id ="add-button">추가</button>
+
+
+css
+#add-button {
+    padding: 10px 20px;         /* 버튼 안쪽 여백 */
+    background-color: #28a745;  /* 초록색 배경 */
+    color: white;               /* 글자 흰색 */
+    border: none;               /* 테두리 제거 */
+    border-radius: 8px;         /* 둥근 모서리 */
+    cursor: pointer;            /* 마우스 올리면 손가락 모양 */
+}
+
+
+결과
+<button id="add-button">추가</button> 이 버튼만 특별히 초록색으로 꾸며짐
+다른 버튼들에는 영향을 주지 않음
+
+
+.className {}
+같은 클래스를 가진 여러 요소에 스타일 적용
+
+#idName {}
+해당 ID 하나짜리 요소에만 스타일 적용
+
+
+
+# add-button:hover {
+}
+
+#add-button
+id="add-button" 인 요소를 선택
+
+:hover
+마우스를 올렸을 때(hover 상태)적용되는 스타일
+
+따라서 #add-button:hover {...} 는
+추가 버튼 위에 마우스를 올리면 어떤 스타일로 변할지 정의하는 부분
+
+
+
+예시
+ css
+
+ #add-button {
+    padding: 10px 20px;
+    background-color: #28a745;  /* 초록색 */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 색 변화 부드럽게 *//
+ }
+
+ #add-button:hover {
+    bakground-color: #218838;  /* 더 진한 초록색으로 변경 */
+
+ }
+
+ html
+ <button id="add-button"> 추가 </button>
+
+ 평소에는 밝은 초록색 버튼
+ 마우스를 올리면 조금 더 진항 초록색을 바뀜 (누르고 싶어지는 효과)
+
+.filter-container button {
+}
+
+.filter-container button {...}
+
+.filter-container
+->
+class="filter-container" 를 가진 요소
+
+button
+그 안에 있는 모든 <button> 태그
+
+즉,
+filter-container 안에 들어 있는 버튼들만 골라서 스타일을 적용하겠다는 뜻
+
+html
+
+<div class="filter-container">
+    <button>전체</button>
+    <button>완료</button>
+    <button>미완료</button>
+</div>
+
+<button>추가 버튼</button>      <!-- 이건 filter-container 밖에 있음>
+
+css
+.filter-container button {
+    padding: 6px 12px;
+    background-color: #f1f1f1;      /* 회색 배경 */
+    border: 1px solid #ccc;         /* 연한 테두리 */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+결과
+filter-container 안의 버튼(전체/완료/미완료) 만 스타일이 적용됨
+바깥에 있는 "추가 버튼"은 이 규칙의 영향을 받지 않음
+
+정리하면
+.filter-container button {...}
+필터 버튼들만 따로 꾸미기 위한 선택자
+
+
+
+
+
+
+.filter-container button:hover:not(.active) {...}
+
+해석
+.filter-container
+class="filter-container" 를 가진 영역 안에서
+
+button
+버튼 요소들 중에서
+
+:hover
+마우스를 올렷을 때
+
+:not(.active)
+단, active 클래스가 없는 버튼만
+
+해석
+.filter-container
+->
+class="filter-container"를 가진 영역 안에서
+
+
+button
+버튼 요소들 중에서
+
+:hover
+마우스를 올렸을 때
+
+:not(.active)
+->
+단, active 클래스가 없는 버튼만
+
+즉,
+필터 버튼 중에서 현재 선택(active)되지 않은 버튼에 마우스를 올렸을 때 적용되는 스타일을 지정하는 코드
+
+
+
+html
+
+<div class="filter-container">
+    <button class="active"> 전체 </button>
+    <button> 완료 </button>
+    <button> 미완료 </button>
+</div>
+
+
+
+
+
+css
+
+.filter-container button {
+    padding: 6px 12px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.filter-container button.active {
+    background-color: #007bff;  /* 선택된 버튼은 파란색 */
+    color: white;
+}
+
+.filter-container button:hover:not(.active) {
+    background-color:#ddd;      /* 선택되지 않은 버튼만 hover 시 회색으로 변함 */
+}
+
+결과
+"전체" 버튼은 active 상태라 파란색이고 hover 효과 안 먹음
+"완료"/"미완료" 버튼은 hover 하면 회색으로 변함
+
+정리하면
+.filter-container button:hover:not(.active)
+->
+선택되지 않은 필터 버튼에만 hover 효과를 주는 조건부 스타일
+
+
+
+
+
+.filter-container button.active {...}
+
+이건 CSS 선택자이다 해석하면
+
+.filter-container
+->
+클래스 이름이 filter-container 인 요소 안에서
+
+button.active
+active 라는 클래스를 가진 button 요소를 선택한다는 뜻
+
+즉
+"filter-container" 라는 컨테이너 안에 있는, active 클래스가 붙은 버튼에 스타일을 적용하라
+
+
+
+.action-buttons button {
+}
+
+이것은 CSS 선택자이다
+
+
+.action-buttons
+class="action-buttons" 라는 클래스를 가진 요소를 선택함
+
+button
+그 안에 포함된 <button> 태그만 선택함
+
+{...}
+선택된 버튼에 적용할 스타일을 정의하는 영역
+
+즉,
+class="action-buttons" 안에 있는 버튼들에게만 스타일을 적용하겠다  라는 뜻
+
+
+예시
+
+html
+
+<div class="action-buttons">
+    <button>저장</button>
+    <button>삭제</button>
+</div>
+
+
+css
+
+.action-buttons button {
+    color: white;
+    background-color: blue;
+    border-radius: 5px;
+}
+
+이렇게 하면 위 div 안의 버튼들만 파란색 배경, 흰색 글씨, 둥근 모서리 스타일이 적용된다.
+
+
+
+.action-buttons .toggle-btn, .action-buttons .delete-btn {
+}
+
+.action-buttons .toggle-btn, .action-buttons .delete-btn {...}
+
+
+이 CSS 선택자의 의미는 다음과 같다
+
+1.
+.action-buttons . toggle-btn
+class="action-buttons" 안에 있는 요소 중
+class="toggle-btn"을 가진 요소를 선택
+
+2.
+.action-buttons .delete-btn
+class="action-buttons" 안에 있는 요소 중
+class="delete-btn"을 가진 요소를 선택
+
+
+,(쉼표)
+두 선택자를 동시에 묶어서 같은 스타일을 적용하겠다는 뜻
+
+즉,
+
+.action-buttons 컨테이너 안의 토글 버튼( .toggle-btn ) 과 삭제 버튼 ( .delete-btn )에 같은 CSS 스타일을 준다는 의미
+
+
+
+예시코드
+
+html
+
+<div class="action-buttons">
+    <button class="toggle-btn"> 완료/취소 </button>
+    <button class="delete-btn"> 삭제 </button>
+</div>
+
+
+css
+
+.action-buttons .toggle-btn
+.action-buttons .delete-btn
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+이렇게 하면 toggle-btn 과 delete-btn 두 버튼에 모두 동일한 스타일이 적용됩니다.
+
+
+
+
+.action-buttons .toggle-btn,
+.action-buttons .delete-btn {
+  padding: 8px 12px;    // padding = 안쪽 여백 -> 버튼 안의 글자와 테두리 사이 간격
+                        // (위아래 8px, 좌우 12px)
+
+  border: none;         // border = 테두리 -> 버튼의 기본 테두리를 없앰
+  border-radius: 5px;   // border-radius = 모서리를 둥글게 -> 버튼의 네 모서리를 5px 만큼 둥글게 만듦
+                        // radius(반지름)라는 뜻 -> 둥글기의 정도
+
+  cursor: pointer;      // cursor = 마우스 커서 -> 버튼 위에 마우스를 올렸을 때
+                        // pointer = 손가락 모양(클릭 가능한 링크/버튼처럼 표시)
+
+}
+
+단어 정리
+padding (패딩) -> "안쪽 여백" (내용과 테두리 사이 공간)
+border (보더) -> "테두리"
+border-radius(보더 레이디우스) -> "둥근 테두리 모서리"
+radius (레이디우스) -> "반지름" (원의 반지름 -> 둥글기의 정도를 나타낼 때 씀)
+cursor (커서) -> "마우스 포인터 모양"
+pointer (포인터) -> "손가락 모양 커서 (클릭 가능한 상태 표시)"
+
+
+
+
+
+css
+
+.action-buttons .toggle-btn {
+    color: var(--color-success);
+}
+
+
+
+.action-buttons .toggle-btn
+class="action-buttons" 안에 있는
+class="toggle-btn" 요소에만 적용
+
+color
+글자색(텍스트 색상)을 지정하는 속성
+
+var(--color-success)
+CSS 변수(variable)를 사용한 것
+--color-success 라는 이름의 CSS 변수를 불러와서 색상 값으로 사용
+예를 들어
+:root { --color-success: green; } 라고 정의돼 있으면, 글자 색이 초록색이 됨
+
+쉽게 풀면
+.action-buttons 안에 있는 toggle-btn의 글자색을, 미리 지정된 성공 색상(예: 초록색)으로 바꾼다.
+
+
+
+
+
+css
+
+.action-buttons .toggle-btn:hover {
+    color: var(--color-success-dark);
+}
+
+.action-buttons .toggle-btn:hover
+class="action-buttons" 안에 있는
+class="toggle-btn" 요소에 적용되는데
+:hover -> 마우스가 버튼 위에 올라갔을 때만 실행
+
+
+color
+글자 색상(텍스트 색상)을 지정
+
+var(--color-success-dark)
+    CSS 변수 --color-success-dark 값을 가져와서 적용
+
+예: :root {--color-success-dark: darkgreen;} 이라고 정의되어 있다면 마우스를 올리면 글자색이 진한 초록색으로 변함
+
+
+쉽게 풀면
+토글 버튼에 마우스를 올렸을 때, 글자 색상을 "성공색(진한 버전)"으로 바꾼다
+
+
+
+.action-buttons .delete-btn {
+    color: var(--color-danger);
+}
+
+
+해석
+.action-buttons .delete-btn
+
+class="action-buttons" 요소 안에 있는
+class="delete-btn" 요소에 스타일 적용
+
+color
+글자 색(텍스트 색상)을 지정
+
+var(--color-danger)
+    CSS 변수 --color-danger 값을 불러와서 적용
+
+
+css
+
+:root {
+    --color-danger: red;
+}
+
+쉽게 풀면
+액션 버튼 영역 안에 있는 삭제 버튼(delete-btn)의 글자색을 위험(빨간색) 색상으로 지정한다
+
+
+
+
+css
+
+.action-buttons .delete-btn:hover {
+}
+
+
+1.
+action-buttons .delete-btn:hover
+class="action-buttons" 안에 있는
+class="delete-btn" 요소에 적용되는데
+:hover -> 마우스를 올렸을 때만 실행
+
+2.
+color
+글자 색상(텍스트 색)을 지정
+
+3.
+var(--color-danger-dark)
+
+CSS 변수 --color-danger-dark 값을 불러와 적용
+보통 빨간색 계열의 진한 톤으로 정의됨
+
+
+예
+
+css
+
+:root {
+    --color-danger: red;
+    --color-danger-dark: darkred;
+}
+
+쉽게 풀면
+삭제 버튼 글자가 평소에는 빨간색(--color-danger)인데, 마우스를 올리면 더 진한 빨간색(--color-danger-dark)으로 변한다
+
+
+
+
+
+
+
+css
+
+.action-buttons .edit-btn,
+.action-buttons .save-btn,
+.action-buttons .cancel-btn {
+    /* 여기에 스타일 정의 */
+}
+
+1.
+.action-buttons .edit-btn
+class="action-buttons" 안에 있는
+class="edit-btn" 요소에 적용
+
+2.
+.action-buttons .save-btn
+class="action-buttons" 안에 있는
+class="save-btn" 요소에 적용
+
+3.
+.action-buttons .cancel-btn
+같은 방식으로 class="cancel-btn" 요소에 적용
+
+4.
+, (쉼표)
+여러 선택자를 동시에 묶어서 같은 스타일을 적용하겠다는 뜻
+
+쉽게 풀면
+액션 버튼 영역 안에 있는
+
+수정 버튼(edit-btn)
+저장 버튼(save-btn)
+취소 버튼(cancel-btn)
+모두에게 동일한 CSS 스타일을 적용한다
+
+
+예시
+
+html
+
+<div class="action-buttons">
+    <button class="edit-btn">수정</button>
+    <button class="save-btn">저장</button>
+    <button class="cancel-btn>취소</button>
+</div>
+
+
+css
+
+.action-buttons .edit-btn,
+.action-buttons .save-btn,
+.action-buttons .cancel-btn {
+    padding: 6px 10px;
+    border-radious: 5px;
+    cursor: pointer;
+}
+
+이렇게 하면
+수정/ 저장/ 취소 버튼이 모두 같은 디자인을 가지게 된다
+
+
+
+
+#todo-list {
+}
+
+CSS에서 #todo-list 는 id가 todo-list인 요소를 선택합니다.
+
+
+html
+
+<ul id="todo-list">  ...   </ul>
+
+처럼 id="todo-list" 가 붙은 <ul> 요소(또는 다른 태그)가 이 규칙의 대상이 됩니다.
+
+현재 코드에서는   투두 리스트 전체 영역(ul)의 기본 스타일을 지정하는 부분입니다.
+
+
+여기서는
+
+css
+
+#todo-list {
+    list-style-type: none;      /* 기본 불릿(동그라미 기호, 네모 기호 등) 제거 */
+    padding: 0;                 /* 내부 여백 제거 */
+}
+
+정리하면, 투두 리스트 항목들이 들어가는 리스트(ul)를 불릿 없이 깔끔하게 보이도록 만드는 스타일
+
+
+
+
+
+#todo-list li {...}
+
+id가 todo-list인 요소 안에 있는 모든 <li> 태그를 선택합니다.
+
+즉, 아래처럼 구조가 있다면
+
+html
+
+<ul id="todo-list>
+    <li>할 일1</li>
+    <li>할 일2</li>
+</ul>
+
+
+이 <li> 들에 스타일이 적용돼요
+
+
+코드에서 적용된 스타일은
+
+css
+
+#todo-list li {
+    display: flex;                              /* 아이템을 가로로 배치 */
+    align-items: center;                        /* 세로 가운데 정렬 */
+    justify-content: space-between;             /* 좌우 끝으로 배치 (할 일 텍스트 <-> 버튼)
+    padding: 15px;                              /* 내부 여백 */
+    background-color: var(--color-bg-items);    /* 배경색 */
+    border: 1px solid #eee;                     /* 테두리 */
+}
+
+
+정리하면
+투두리스트의 각 아이템(개별 <li>을 카드 형태로 꾸며서)
+텍스트와 버튼이 한 줄에 배치되고,
+여백과 그림자 효과로 보기 좋게 정리되도록 만든 스타일입니다.
+
+
+
+#todo-list li.completed {
+}
+
+이 선택자는
+
+id="todo-list" 안에 있는
+<li> 태그 중에서
+class="completed" 가 추가된 요소
+에만 적용됩니다.
+
+
+예시
+html
+
+<ul id="todo-list">
+    <li>할 일 1</li>
+    <li class="completed">할 일 2 (완료됨) </li>
+</ul>
+
+해당 <li> 에는 다음 스타일이 적용됩니다.
+
+css
+
+#todo-list li.completed {
+    background-color: var(--color-bg-item-completed);   /* 완료된 항목만 배경색 변경 */
+}
+
+정리하면
+완료된 투두 항목을 시각적으로 구분하기 위해 배경색을 다르게 표시하는 스타일
+즉, "완료됨" 표시를 배경색으로 알려줍니다
+
+
+
+.todo-text{...}
+
+CSS에서 .todo-text 는 class 이름이 todo-text인 요소를 선택합니다.
+
+html
+
+<li>
+    <span class="todo-text">할 일 내용 </span>
+</li>
+
+
+코드에서 적용된 스타일은
+
+css
+
+.todo-text {
+
+}
+
+
+
+
+.todo-text.completed-text {
+이건 클래스가 선택자 두 개를 동시에 만족하는 요소를 의미합니다.
+
+즉,
+
+class="todo-text" 이면서
+class="completed-text" 도 함께 가진 요소
+
+예시
+
+html
+
+<span class="todo-text completed-text> 완료된 할 일 </span>
+
+
+코드에서 적용된 스타일은
+
+css
+
+.todo-text.completed-text {
+    text-decoration: line-through;      /* 취소선 표시 */
+    color: var(--color-text-muted);     /* 흐린 회색 글씨 */
+}
+
+정리하면
+
+투두 텍스트가 완료된 상태일 때
+글씨에 취소선을 긋고
+색을 연하게 바꿔서
+"끝난 작업임을" 시각적으로 보여주는 스타일
+
+
+
+
+.action-buttons {
+}
+
+CSS에서 .action-buttons 는 class 이름이 action-buttons 인 요소를 선택합니다.
+
+예시
+
+html
+
+<li>
+    <span class="todo-text"> 할 일 내용 </span>
+    <div class="action-buttons">
+        <button class="toggle-btn"> 체크표시 </button>
+        <button class="delete-btn"> 엑스표시 </button>
+    </div>
+</li>
+
+
+코드에서 적용된 스타일은
+
+css
+
+.action-buttons {
+    display: flex;  /* 내부 버튼들을 가로로 배치 */
+    gap: 8px;       /* 버튼 사이 간격 */
+}
+
+
+
+정리하면,
+->
+투두 리스트 아이템 옆에 있는 버튼 모음(예:완료, 삭제, 수정 버튼 등)을 가로로 나란히 정렬하고 일정한 간격을 주는 스타일
+즉, 버튼들이 뭉치지 않고 깔끔하게 배열되도록 해주는 역할을 합니다.
