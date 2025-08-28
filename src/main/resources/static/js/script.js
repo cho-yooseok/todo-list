@@ -1,3 +1,5 @@
+/* src/main/resources/static/js/script.js  */
+
 /**
  * @file 투두리스트 프론트엔드 메인 로직
  * @description 서버 API와 통신하여 투두리스트의 CRUD(생성, 읽기, 수정, 삭제) 및 필터링 기능을 담당합니다.
