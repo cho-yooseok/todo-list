@@ -1,0 +1,81 @@
+package com.example.todolist.repository;
+
+import com.example.todolist.model.Todo;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * TodoRepository의 쿼리 메서드를 검증하는 테스트 클래스
+ * - @DataJpaTest: JPA 관련 컴포넌트(Repository, Entity)만 로드해서 가볍게 테스트할 수 있도록 해준다.
+ */
+@DataJpaTest
+class TodoRepositoryTest {
+
+    @Autowired
+    private TodoRepository todoRepository;
+    // Spring이 TodoRepository의 구현체를 주입해줌
+    // (Spring Data JPA가 인터페이스 기반으로 프록시 객체를 생성)
+
+    @Test
+    @DisplayName("미완료 Todo 항목들을 생성 시간 역순으로 조회한다.")
+    void findIncompleteOrderByCreatedAtDesc() throws InterruptedException {
+        // given: 테스트에 사용할 데이터를 준비
+        Todo todo1 = new Todo("빨래하기"); // 기본값: 미완료 상태
+        todoRepository.save(todo1);
+
+        Thread.sleep(10); // createdAt 값 차이를 두기 위해 잠시 대기
+
+        Todo todo2 = new Todo("청소하기");
+        todo2.setCompleted(true); // 완료 상태로 변경
+        todoRepository.save(todo2);
+
+        Thread.sleep(10); // createdAt 값 차이를 두기 위해 잠시 대기
+
+        Todo todo3 = new Todo("공부하기"); // 기본값: 미완료 상태
+        todoRepository.save(todo3);
+
+        // when: Repository의 커스텀 메서드 호출
+        List<Todo> incompleteTodos = todoRepository.findIncompleteOrderByCreatedAtDesc();
+
+        // then: 검증
+        // 미완료 항목은 todo1(빨래하기), todo3(공부하기) → 총 2개
+        assertThat(incompleteTodos).hasSize(2);
+        // 최신(createdAt 가장 늦은) todo3("공부하기")가 첫 번째
+        assertThat(incompleteTodos.get(0).getTitle()).isEqualTo("공부하기");
+        // 그다음은 todo1("빨래하기")
+        assertThat(incompleteTodos.get(1).getTitle()).isEqualTo("빨래하기");
+    }
+
+    @Test
+    @DisplayName("완료된 Todo 항목들을 수정 시간 역순으로 조회한다.")
+    void findCompletedOrderByUpdatedAtDesc() throws InterruptedException {
+        // given: 완료 상태의 Todo 항목 2개를 저장
+        Todo todo1 = new Todo("책 읽기");
+        todo1.setCompleted(true); // 완료 처리
+        todoRepository.save(todo1);
+
+        Thread.sleep(10); // updatedAt 차이를 두기 위함
+
+        Todo todo2 = new Todo("영화 보기");
+        todo2.setCompleted(true); // 완료 처리
+        todoRepository.save(todo2);
+
+        // when: Repository의 커스텀 메서드 호출
+        List<Todo> completedTodos = todoRepository.findCompletedOrderByUpdatedAtDesc();
+
+        // then: 검증
+        // 완료된 항목은 todo1, todo2 → 총 2개
+        assertThat(completedTodos).hasSize(2);
+        // 최신(updatedAt 가장 늦은) todo2("영화 보기")가 첫 번째
+        assertThat(completedTodos.get(0).getTitle()).isEqualTo("영화 보기");
+        // 그다음은 todo1("책 읽기")
+        assertThat(completedTodos.get(1).getTitle()).isEqualTo("책 읽기");
+    }
+}
+

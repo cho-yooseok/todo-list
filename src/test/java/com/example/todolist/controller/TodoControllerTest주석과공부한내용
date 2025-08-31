@@ -351,6 +351,145 @@ new Todo("API 테스트")
 "API 테스트" 라는 문자열을 생성자의 인자로 넘기고 있다.
 
 
+given(todoService.createTodo(any(TodoRequestDto.class)))
+이 코드는 테스트에서 Mockito 를 쓸 때 나오는 문법이다
+
+given(...)
+이런 상황을 가정한다    라는 뜻
+Mockito 에서 BDD 스타일(BDDMockito)로 스텁(stub, 가짜 동작 정의)을 만들 때 씁니다
+즉, 특정 메서드가 호출되면 어떤 결과를 돌려줄지 미리 정해두는 역할
+
+todoService.createTodo(...)
+todoService 라는 객체의 createTodo 메서드 호출을 지정합니다.
+여기서 createTodo는 실제 서비스 로직을 테스트하지 않고, 가짜(mock) 서비스가 호출될 때 어떤 동작을 할지 정의하려는 것
+
+any(TodoRequestDto.class)
+createTodo 메서드가 어떤 TodoRequestDto 객체를 받더라도 상관없이
+아무 TodoRequestDto 타입의 객체가 들어아와도 동일하도록 설정 한다는 뜻
+
+정리하면
+todoService.createTodo() 메서드가 어떤 TodoRequestDto 객체를 인자로 받더라고,
+그 호출에 대해 우리가 원하는 동작을 하도록 미리 가정한다
+
+.willReturn(...)
+해당 메서드가 호출되면 무엇을 반환할지 지정
+
+new TodoResponseDto(savedTodo)
+반환할 객체입니다
+savedTodo 라는 Todo 엔티티를 기반으로 새 TodoResponseDto(응답 DTO)를 만들어 반환하도록 설정
+
+정리하면
+todoService.createTodo() 메서드가 어떤 TodoRequestDto 객체를 받더라도, 실행되며ㅛㄴ
+savedTodo 를 담은 새로운 TodoResponseDto를 반환하도록 설정한다
+
+
+
+
+ResultActions resultActions = mockMvc.perform(post("/api/todos"))
+
+
+ResultActions resultActions
+
+ResultActions
+MockMvc 요청을 실행한 뒤, 그 결과(응답)를 담는 객체 타입입니다.
+여기에는 응답 본문, 상태코드, 헤더 등이 들어있습니다
+이후에 .andExpect(...)   .andDo(...)  같은 검증이나 디버깅에 사용됩니다.
+
+resultActions
+이 ResultActions 객체를 담아둘 변수 이름입니다.
+
+
+mockMvc.perform(...)
+mockMvc
+가짜 MVC 환경(MockMvc)을 제공하는 객체
+실제 서버를 띄우지 않고, Spring MVC 요청을 흉내 내서 테스트할 수 있게 해줍니다
+.perform(...)
+지정한 HTTP 요청을 실행합니다
+즉, "이 요청을 보낸다고 가정하고 실행" 하는것입니다
+
+
+post("/api/todos")
+
+post(...)
+HTTP POST 요청을 보냅니다
+
+"/api/todos"
+요청을 보낼 URL 경로입니다
+여기서는
+"할 일을 생성하는 API" 엔드 포인트를 호출하는 것입니다.
+
+전체 해석
+MockMvc를 이용해서 /api/todos 경로로 POST 요청을 실행하고, 그 결과를 resultAtions 라는 변수에 담는다.
+
+
+.contentType(MediaType.APPLICATION_JSON)
+이건 HTTP 요청의 본문(body)이 어떤 타입인지 지정하는 코드입니다
+
+.contentType(...)
+요청(request)의 Content-Type 헤더를 설정하는 메서드입니다.
+(즉, "내가 보내는 데이터가 어떤 형식이야" 라고 서버에 알려주는 역할)
+
+MediaType.APPLICAION_JSON
+미디어 타입(데이터 형식)을 나타내는 상수
+여기서는 apllication/json 을 의미합니다
+
+즉, 이 요청 본문은 JSON 형식이다    라는 뜻입니다
+
+
+즉
+.contentType(MediaType.APPICAION_JSON)
+->
+이 요청의 본문이 JSON 형식임을 서버에 알린다
+
+
+
+
+.content(objectMapper.writeValueAsString(requestDto)));
+
+
+이 구문은 테스트에서 HTTP요청의 본문(body)에 JSON 데이터를 넣는 부분입니다.
+
+.content(objectMapper.writeValueAsString(requestDto))
+
+.content(...)
+HTTP 요청의 본문(body)에 담을 내용을 지정합니다
+
+objectMapper
+Jackson 라이브러리에서 제공하는 객체(JSON 직렬화/ 역직렬화 도구)
+자바 객체 <-> JSON 문자열 변환을 해줍니다.
+
+.writeValueAsString(requestDto)
+requestDto 객체를 JSON 문자열로 변환합니다.
+
+예를 들어,
+requestDto.setTitle("API 테스트");
+라고 했다면  {"title":"API 테스트"} 라는 JSON 문자열로 바꿉니다.
+
+
+
+실제 HTTP 요청으로 표현하면
+
+이 코드는 요청본문을 이렇게 만든다
+POST/api/todos
+Content-Type: application/json
+
+{
+"title: "API 테스트"
+}
+
+정리
+requestDto 객체를 JSON 으로 바꿔서 요청 본문에 담는다
+
+.content(objectMapper.writeValueAsString(requestDto))
+
+
+
+
+
+
+
+
+
 
 
 
