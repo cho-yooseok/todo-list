@@ -43,7 +43,7 @@ Spring Boot를 활용하여 **Back-End 기본기를 다지기 위해** 진행한
 
 ##  아키텍처
 
-이 프로젝트는 역할과 책임에 따라 계층을 명확하게 분리하는 **계층형 아키텍처(Layered Architecture)**를 적용하여 설계했습니다. 이를 통해 코드의 유지보수성과 확장성을 높이고자 했습니다.
+이 프로젝트는 역할과 책임에 따라 계층을 명확하게 분리하는  계층형 아키텍처(Layered Architecture) 를 적용하여 설계했습니다. 이를 통해 코드의 유지보수성과 확장성을 높이고자 했습니다.
 
 ```
 Client (HTML/CSS/JS)
@@ -114,6 +114,9 @@ spring.datasource.password={YOUR_PASSWORD}
 ```
 - 테스트 실행 후 리포트는 `build/reports/tests/test/index.html` 에서 확인할 수 있습니다.
 
+테스트결과
+![스크린샷 2025-09-02 001614.png](src/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-09-02%20001614.png)
+![스크린샷 2025-09-02 001619.png](src/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-09-02%20001619.png)
 <br>
 
 ---
